@@ -1,0 +1,63 @@
+﻿@using PrintStore.Domain.Entities
+@model IEnumerable<Category>
+
+@{
+    ViewBag.Title = "Admin - Categories and Products";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Categories and Products</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-condensed table-striped table-responsive">
+            <tr>
+                <th style="width:5%;">Id</th>
+                <th style="width:15%;">Name</th>
+                <th style="width:25%;">Description</th>
+                <th style="width:15%;">Actions</th>
+                <th style="width:40%;">Products</th>
+            </tr>
+            @foreach (Category category in Model)
+            {
+                <tr>
+                    <td>@category.CategoryId</td>
+                    <td>@category.Name</td>
+                    <td>@category.Description</td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditCategory", "Admin", new { categoryId = category.CategoryId }, new { @class = "btn btn-default" })
+                        @using (Html.BeginForm("DeleteCategory", "Admin", FormMethod.Post))
+                        {
+                            <input name="categoryId" type="hidden" value="@category.CategoryId" />
+                            <input type="submit" value="Delete" class="btn btn-danger" />
+                        }
+                    </td>
+                    <td>
+                        @foreach (Product product in category.Products)
+                        {
+                            if (product.IsDeleted == true)
+                            {
+                                continue;
+                            }
+                            <p>
+                                @product.Name
+                                @Html.ActionLink("Edit", "EditProduct", "Admin", new { productId = product.ProductId }, new { @class = "btn btn-default" })
+                                @using (Html.BeginForm("DeleteProduct", "Admin", FormMethod.Post))
+                                {
+                                    <input type="hidden" name="productId" value="@product.ProductId" />
+                                    <input type="submit" value="Delete" class="btn btn-danger" />
+                                }
+                            </p>
+                            <hr />
+                        }
+                        <p>@Html.ActionLink("Add new product", "AddProduct", "Admin", new { categoryId = category.CategoryId }, new { @class = "btn btn-primary" })</p>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="panel-footer">
+        @Html.ActionLink("Add new category", "AddCategory", "Admin", null, new { @class = "btn btn-primary" })
+    </div>
+</div>

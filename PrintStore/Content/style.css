@@ -1,0 +1,62 @@
+﻿.carousel-fade .carousel-inner .item {
+    opacity: 0;
+    -webkit-transition-property: opacity;
+    -moz-transition-property: opacity;
+    -o-transition-property: opacity;
+    transition-property: opacity;
+}
+
+.carousel-fade .carousel-inner .active {
+    opacity: 1;
+}
+
+    .carousel-fade .carousel-inner .active.left,
+    .carousel-fade .carousel-inner .active.right {
+        left: 0;
+        opacity: 0;
+        z-index: 1;
+    }
+
+.carousel-fade .carousel-inner .next.left,
+.carousel-fade .carousel-inner .prev.right {
+    opacity: 1;
+}
+
+.carousel-fade .carousel-control {
+    z-index: 2;
+}
+
+.wrapper {
+    margin-top: 70px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.column-left {
+    float: left;
+    width: 20%;
+}
+
+.column-center {
+    width: 60%;
+    display: inline-block;
+}
+
+.column-right {
+    float: right;
+    width: 20%;
+}
+
+.label-price {
+    font-size: 13pt;
+    line-height: 51px;
+    border-radius: 0px;
+    padding: 15px;
+}
+
+body {
+    background-color: #2b3e50;
+background-image: url(../Images/Infrastructure/bg.png);
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}

@@ -1,0 +1,50 @@
+﻿@model PrintStore.Domain.Entities.Product
+
+@{
+    ViewBag.Title = "EditProduct";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h3>Edit product</h3>
+    </div>
+    @using (Html.BeginForm("EditProduct", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="panel-body">
+            @Html.ValidationSummary()
+            @Html.HiddenFor(p => p.ProductId)
+            @Html.HiddenFor(p => p.ImageGuid)
+            @Html.HiddenFor(p => p.SmallImagePath)
+            @Html.HiddenFor(p => p.BigImagePath)
+            @Html.HiddenFor(p => p.CategoryId)
+
+            <p>@Html.LabelFor(p => p.Name)</p>
+            <p>@Html.TextBoxFor(p => p.Name, new { @class = "form-control" })</p>
+
+            <p>@Html.LabelFor(p => p.Description)</p>
+            <p>@Html.TextAreaFor(p => p.Description, new { @class = "form-control", rows = 5 })</p>
+
+            <p>@Html.LabelFor(p => p.Price)</p>
+            <p>@Html.EditorFor(p => p.Price, new { @class = "form-control" })</p>
+
+            <p>@Html.LabelFor(p => p.Material)</p>
+            <p>@Html.DropDownListFor(p => p.Material, new SelectList(Enum.GetNames(Model.Material.GetType()), Model.Material.ToString()), new { @class = "form-control" })</p>
+
+            <p>Image</p>
+                @if (Model.SmallImagePath == null)
+                {
+                    <p><input type="file" name="image" class="form-control" /></p>
+                }
+                else
+                {
+                    <p><img src="~/Images/@Model.SmallImagePath" width="400" height="300" /></p>
+                    <p><input type="file" name="image" class="form-control" /></p>
+                }
+        </div>
+        <div class="panel-footer">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            @Html.ActionLink("Back", "GetCategories", "Admin", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

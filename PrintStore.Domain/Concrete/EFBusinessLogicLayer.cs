@@ -1,0 +1,210 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using PrintStore.Domain.Abstract;
+using PrintStore.Domain.Entities;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Web;
+
+namespace PrintStore.Domain.Concrete
+{
+    /// <summary>
+    /// Business logic layer based on Entity Framework
+    /// </summary>
+    public class EFBusinessLogicLayer : IBusinessLogicLayer
+    {
+        private EFDbContext context = new EFDbContext();
+
+        public IEnumerable<Product> Products
+        {
+            get
+            {
+                return context.Products.Where(p => !p.IsDeleted);
+            }
+        }
+
+        public IEnumerable<Category> Categories
+        {
+            get
+            {
+                return context.Categories.Where(c => !c.IsDeleted);
+            }
+        }
+
+        /// <summary>
+        /// Location for temporary image that is uploaded with product
+        /// </summary>
+        public const string TempImagePath = "~/Images/temp.jpg";
+
+        /// <summary>
+        /// If id of uploaded category is 0, it is saved as new entity
+        /// </summary>
+        /// <param name="category">Category to save</param>
+        public void SaveCategory(Category category)
+        {
+            //Add new
+            if (category.CategoryId == 0)
+            {
+                context.Categories.Add(category);
+            }
+            //Update
+            else
+            {
+                Category forSave = context.Categories.Find(category.CategoryId);
+                if(forSave != null)
+                {
+                    forSave.CategoryId = category.CategoryId;
+                    forSave.Name = category.Name;
+                    forSave.Description = category.Description;
+                    IEnumerable<Product> productsOfCategory = Products.Where(p => p.Category == category).ToList();
+                    forSave.Products = (ICollection<Product>)productsOfCategory;
+                }
+            }
+
+            context.SaveChanges();
+        }
+
+        public Category DeleteCategory(int categoryId)
+        {
+            Category category = context.Categories.Find(categoryId);
+            if (category != null)
+            {
+                category.IsDeleted = true;
+                category.Products.ToList().ForEach(p => p.IsDeleted = true);
+            }
+
+            context.SaveChanges();
+            return category;
+        }
+
+        /// <summary>
+        /// If id of uploaded product is 0, it is saved as new entity
+        /// Imageguid is generated when image of product is uploaded
+        /// If imageguid is not null, it is used to save images of product
+        /// </summary>
+        /// <param name="product">Product to save</param>
+        public void SaveProduct(Product product)
+        {
+            //Add new
+            if (product.ProductId == 0)
+            {
+                product.DateAdded = DateTime.UtcNow;
+                if (product.ImageGuid != default(Guid))
+                {
+                    product = SaveImages(product);
+                }
+
+                Category category = context.Categories.Where(c => c.CategoryId == product.CategoryId).First();
+                category.Products.Add(product);
+                product.Category = category;
+                context.Products.Add(product);
+            }
+            //Update
+            else
+            {
+                Product forSave = context.Products.Find(product.ProductId);
+                if(forSave != null)
+                {
+                    forSave.ProductId = product.ProductId;
+                    if (product.ImageGuid != default(Guid))
+                    {
+                        forSave.ImageGuid = product.ImageGuid;
+                        forSave = SaveImages(forSave);
+                    }
+
+                    forSave.Name = product.Name;
+                    forSave.Description = product.Description;
+                    forSave.Price = product.Price;
+                    forSave.Material = product.Material;
+                    forSave.CategoryId = product.CategoryId;
+                    Category category = context.Categories.Where(c => c.CategoryId == forSave.CategoryId).First();
+                    forSave.Category = category;
+                    category.Products.Add(forSave);
+                }
+            }
+
+            context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Creates two bitmaps from temporary image and saves them using Imageguid as jpeg files
+        /// </summary>
+        /// <param name="product">Product to save images for</param>
+        /// <returns>Updated product</returns>
+        private Product SaveImages(Product product)
+        {
+            String tempImageLocation = HttpContext.Current.Server.MapPath(TempImagePath);
+            Bitmap tempImage = new Bitmap(tempImageLocation);
+            Size imageSize = new Size(1200, 800);
+            Bitmap bigImage = new Bitmap(tempImage, imageSize);
+            bigImage.Save(HttpContext.Current.Server.MapPath(string.Format("~/Images/big_{0}.jpg", product.ImageGuid)), ImageFormat.Jpeg);
+            bigImage.Dispose();
+            product.BigImagePath = string.Format("big_{0}.jpg", product.ImageGuid);
+            imageSize = new Size(300, 200);
+            Bitmap smallImage = new Bitmap(tempImage, imageSize);
+            smallImage.Save(HttpContext.Current.Server.MapPath(string.Format("~/Images/small_{0}.jpg", product.ImageGuid)), ImageFormat.Jpeg);
+            smallImage.Dispose();
+            tempImage.Dispose();
+            product.SmallImagePath = string.Format("small_{0}.jpg", product.ImageGuid);
+            System.IO.File.Delete(tempImageLocation);
+            return product;
+        }
+
+        public Product DeleteProduct(int productId)
+        {
+            Product product = context.Products.Find(productId);
+            if (product != null)
+            {
+                product.IsDeleted = true;
+                context.SaveChanges();
+            }
+
+            context.SaveChanges();
+            return product;
+        }
+
+        public IEnumerable<Product> SortProducts(int categoryId, SortingOptions option)
+        {
+            IEnumerable<Product> products = context.Categories.Find(categoryId).Products;
+            if (option == SortingOptions.ByNameAsc)
+            {
+                products = products.OrderBy(p => p.Name);
+            }
+            else if (option == SortingOptions.ByNameDesc)
+            {
+                products = products.OrderByDescending(p => p.Name);
+            }
+            else if (option == SortingOptions.ByPriceAsc)
+            {
+                products = products.OrderBy(p => p.Price);
+            }
+            else if (option == SortingOptions.ByPriceDesc)
+            {
+                products = products.OrderByDescending(p => p.Price);
+            }
+            else if (option == SortingOptions.ByDateAsc)
+            {
+                products = products.OrderBy(p => p.DateAdded);
+            }
+            else if (option == SortingOptions.ByDateDesc)
+            {
+                products = products.OrderByDescending(p => p.DateAdded);
+            }
+
+            return products;
+        }
+
+        public enum SortingOptions
+        {
+            ByNameAsc,
+            ByNameDesc,
+            ByPriceAsc,
+            ByPriceDesc,
+            ByDateAsc,
+            ByDateDesc
+        }
+    }
+}

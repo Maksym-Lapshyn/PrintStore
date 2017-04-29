@@ -1,0 +1,58 @@
+﻿@using PrintStore.Domain.Entities
+@using PrintStore.Domain.Concrete
+@model IEnumerable<Product>
+
+@{
+    ViewBag.Title = "GetProducts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <p>
+        Sorting options:
+        &ensp;
+        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByNameAsc })" class="btn btn-default">
+            Name Asc <span class="glyphicon glyphicon-arrow-up"></span>
+        </a>
+        &ensp;
+        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByNameDesc })" class="btn btn-default">
+            Name Desc <span class="glyphicon glyphicon-arrow-down"></span>
+        </a>
+        &ensp;
+        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByPriceAsc })" class="btn btn-default">
+            Price Asc <span class="glyphicon glyphicon-arrow-up"></span>
+        </a>
+        &ensp;
+        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByPriceDesc })" class="btn btn-default">
+            Price Desc <span class="glyphicon glyphicon-arrow-down"></span>
+        </a>
+        &ensp;
+        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByDateAsc })" class="btn btn-default">
+            Date Asc <span class="glyphicon glyphicon-arrow-up"></span>
+        </a>
+        &ensp;
+        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByDateDesc })" class="btn btn-default">
+            Date Desc <span class="glyphicon glyphicon-arrow-down"></span>
+        </a>
+    </p>
+</div>
+<div class="row">
+    @foreach (Product product in Model)
+    {
+        <div class="col-sm-6 col-lg-4">
+            <div class="thumbnail">
+                <img src="~/Images/@product.SmallImagePath" alt="@product.Name" />
+                <div class="caption">
+                    <h3>@product.Name</h3>
+                    <p><span class="label label-default label-price">$@product.Price</span></p>
+                    <p>
+                        @Html.ActionLink("Add to cart", "AddProductToCart", "Cart", null, new { @class = "btn btn-primary btn-lg" })
+                        @Html.ActionLink("Details", "GetProductDetails", "Product", new { productId = product.ProductId }, new { @class = "btn btn-default pull-right btn-lg" })
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
