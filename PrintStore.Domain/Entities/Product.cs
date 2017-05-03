@@ -26,6 +26,7 @@ namespace PrintStore.Domain.Entities
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Specify price")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Enter positive price")]
         public decimal Price { get; set; }
 
         [Required(ErrorMessage = "Enter description")]
@@ -40,6 +41,12 @@ namespace PrintStore.Domain.Entities
         [Required(ErrorMessage = "Select material")]
         public Material Material { get; set; }
 
+        [Required(ErrorMessage = "Select size")]
+        public Size Size { get; set; }
+
+        [Required(ErrorMessage = "Select texture")]
+        public Texture Texture { get; set; }
+
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
     }
@@ -50,5 +57,21 @@ namespace PrintStore.Domain.Entities
         Metal,
         Ceramic,
         Paper
+    }
+
+    public enum Size
+    {
+        Tiny,
+        Small,
+        Medium,
+        Large
+    }
+
+    public enum Texture
+    {
+        Flat,
+        Dotted,
+        Squares,
+        Triangles
     }
 }

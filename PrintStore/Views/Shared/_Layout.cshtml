@@ -32,8 +32,15 @@
     </div>
 
     <div class="container-fluid wrapper">
-        <div class="column-left">
-            &nbsp;
+        <div class="column-left" id="column-left">
+            @if(ViewContext.RouteData.GetRequiredString("controller") == "Product")
+            {
+                { Html.RenderAction("DisplayFilter", "Product"); }
+            }
+            else
+            {
+                <p>&nbsp;</p>
+            }
         </div>
         <div class="column-center">
             @RenderBody()
@@ -46,12 +53,13 @@
     <div class="container">
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - PrintStore - All rights reserved</p>
+            <p>@DateTime.Now.Year - PrintStore&copy; - All rights reserved</p>
         </footer>
     </div>
 
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
 </body>
 </html>
 

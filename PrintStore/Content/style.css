@@ -35,6 +35,7 @@
 .column-left {
     float: left;
     width: 20%;
+    padding-right: 30px;
 }
 
 .column-center {
@@ -56,7 +57,7 @@
 
 body {
     background-color: #2b3e50;
-background-image: url(../Images/Infrastructure/bg.png);
-/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+    background-image: url(../Images/Infrastructure/bg.png);
+    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
     /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }

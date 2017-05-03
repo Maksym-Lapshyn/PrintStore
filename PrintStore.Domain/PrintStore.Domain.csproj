@@ -56,9 +56,33 @@
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\Product.cs" />
+    <Compile Include="Migrations\201704291005068_InitialCreate.cs" />
+    <Compile Include="Migrations\201704291005068_InitialCreate.Designer.cs">
+      <DependentUpon>201704291005068_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704291343215_29\4\2017.cs" />
+    <Compile Include="Migrations\201704291345391_first.cs" />
+    <Compile Include="Migrations\201704291345391_first.Designer.cs">
+      <DependentUpon>201704291345391_first.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705021029114_second.cs" />
+    <Compile Include="Migrations\201705021029114_second.Designer.cs">
+      <DependentUpon>201705021029114_second.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201704291005068_InitialCreate.resx">
+      <DependentUpon>201704291005068_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704291345391_first.resx">
+      <DependentUpon>201704291345391_first.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705021029114_second.resx">
+      <DependentUpon>201705021029114_second.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />

@@ -14,19 +14,24 @@
 
         <div class="col-xs-12 col-lg-4">
             <h3>@Model.Name</h3>
-            <p>Category:</p>
-            <p class="text-info">@Model.Category.Name</p>
-            <p>Material:</p>
-            <p class="text-info">@Model.Material.ToString()</p>
-            <p>Date added:</p>
-            <p class="text-info">@Model.DateAdded</p>
+
+            <p>Category: <span class="text-info">@Model.Category.Name</span></p>
+
+            <p>Material: <span class="text-info">@Model.Material.ToString()</span></p>
+
+            <p>Size: <span class="text-info">@Model.Size.ToString()</span></p>
+
+            <p>Texture: <span class="text-info">@Model.Texture.ToString()</span></p>
+
+            <p>Date added: <span class="text-info">@Model.DateAdded</span></p>
             <hr />
+
             <p><span class="label label-default label-price">$@Model.Price</span></p>
+
             <p>@Html.ActionLink("Add to cart", "AddProductToCart", "Product", null, new { @class = "btn btn-primary btn-lg" })</p>
         </div>
     </div>
     <div class="caption">
-        <hr />
         <p>Description:</p>
         <p class="text-info">@Model.Description</p>
     </div>

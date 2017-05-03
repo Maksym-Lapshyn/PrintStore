@@ -1,41 +1,11 @@
 ﻿@using PrintStore.Domain.Entities
 @using PrintStore.Domain.Concrete
-@model IEnumerable<Product>
+@model List<Product>
 
 @{
     ViewBag.Title = "GetProducts";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<div>
-    <p>
-        Sorting options:
-        &ensp;
-        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByNameAsc })" class="btn btn-default">
-            Name Asc <span class="glyphicon glyphicon-arrow-up"></span>
-        </a>
-        &ensp;
-        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByNameDesc })" class="btn btn-default">
-            Name Desc <span class="glyphicon glyphicon-arrow-down"></span>
-        </a>
-        &ensp;
-        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByPriceAsc })" class="btn btn-default">
-            Price Asc <span class="glyphicon glyphicon-arrow-up"></span>
-        </a>
-        &ensp;
-        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByPriceDesc })" class="btn btn-default">
-            Price Desc <span class="glyphicon glyphicon-arrow-down"></span>
-        </a>
-        &ensp;
-        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByDateAsc })" class="btn btn-default">
-            Date Asc <span class="glyphicon glyphicon-arrow-up"></span>
-        </a>
-        &ensp;
-        <a href="@Url.Action("GetSortedProducts", "Product", new { categoryId = Model.First().CategoryId, sortOption = EFBusinessLogicLayer.SortingOptions.ByDateDesc })" class="btn btn-default">
-            Date Desc <span class="glyphicon glyphicon-arrow-down"></span>
-        </a>
-    </p>
-</div>
 <div class="row">
     @foreach (Product product in Model)
     {

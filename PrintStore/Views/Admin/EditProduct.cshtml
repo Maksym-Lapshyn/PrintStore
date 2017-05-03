@@ -31,6 +31,12 @@
             <p>@Html.LabelFor(p => p.Material)</p>
             <p>@Html.DropDownListFor(p => p.Material, new SelectList(Enum.GetNames(Model.Material.GetType()), Model.Material.ToString()), new { @class = "form-control" })</p>
 
+            <p>@Html.LabelFor(p => p.Size)</p>
+            <p>@Html.DropDownListFor(p => p.Size, new SelectList(Enum.GetNames(Model.Size.GetType()), Model.Size.ToString()), new { @class = "form-control" })</p>
+
+            <p>@Html.LabelFor(p => p.Texture)</p>
+            <p>@Html.DropDownListFor(p => p.Texture, new SelectList(Enum.GetNames(Model.Texture.GetType()), Model.Texture.ToString()), new { @class = "form-control" })</p>
+
             <p>Image</p>
                 @if (Model.SmallImagePath == null)
                 {

@@ -119,6 +119,8 @@ namespace PrintStore.Domain.Concrete
                     forSave.Description = product.Description;
                     forSave.Price = product.Price;
                     forSave.Material = product.Material;
+                    forSave.Texture = product.Texture;
+                    forSave.Size = product.Size;
                     forSave.CategoryId = product.CategoryId;
                     Category category = context.Categories.Where(c => c.CategoryId == forSave.CategoryId).First();
                     forSave.Category = category;
@@ -138,12 +140,12 @@ namespace PrintStore.Domain.Concrete
         {
             String tempImageLocation = HttpContext.Current.Server.MapPath(TempImagePath);
             Bitmap tempImage = new Bitmap(tempImageLocation);
-            Size imageSize = new Size(1200, 800);
+            System.Drawing.Size imageSize = new System.Drawing.Size(1200, 800);
             Bitmap bigImage = new Bitmap(tempImage, imageSize);
             bigImage.Save(HttpContext.Current.Server.MapPath(string.Format("~/Images/big_{0}.jpg", product.ImageGuid)), ImageFormat.Jpeg);
             bigImage.Dispose();
             product.BigImagePath = string.Format("big_{0}.jpg", product.ImageGuid);
-            imageSize = new Size(300, 200);
+            imageSize = new System.Drawing.Size(300, 200);
             Bitmap smallImage = new Bitmap(tempImage, imageSize);
             smallImage.Save(HttpContext.Current.Server.MapPath(string.Format("~/Images/small_{0}.jpg", product.ImageGuid)), ImageFormat.Jpeg);
             smallImage.Dispose();
@@ -166,30 +168,29 @@ namespace PrintStore.Domain.Concrete
             return product;
         }
 
-        public IEnumerable<Product> SortProducts(int categoryId, SortingOptions option)
+        public IEnumerable<Product> SortProducts(IEnumerable<Product> products, string option)
         {
-            IEnumerable<Product> products = context.Categories.Find(categoryId).Products;
-            if (option == SortingOptions.ByNameAsc)
+            if (option == SortingOptions.ByNameAsc.ToString())
             {
                 products = products.OrderBy(p => p.Name);
             }
-            else if (option == SortingOptions.ByNameDesc)
+            else if (option == SortingOptions.ByNameDesc.ToString())
             {
                 products = products.OrderByDescending(p => p.Name);
             }
-            else if (option == SortingOptions.ByPriceAsc)
+            else if (option == SortingOptions.ByPriceAsc.ToString())
             {
                 products = products.OrderBy(p => p.Price);
             }
-            else if (option == SortingOptions.ByPriceDesc)
+            else if (option == SortingOptions.ByPriceDesc.ToString())
             {
                 products = products.OrderByDescending(p => p.Price);
             }
-            else if (option == SortingOptions.ByDateAsc)
+            else if (option == SortingOptions.ByDateAsc.ToString())
             {
                 products = products.OrderBy(p => p.DateAdded);
             }
-            else if (option == SortingOptions.ByDateDesc)
+            else if (option == SortingOptions.ByDateDesc.ToString())
             {
                 products = products.OrderByDescending(p => p.DateAdded);
             }
@@ -205,6 +206,21 @@ namespace PrintStore.Domain.Concrete
             ByPriceDesc,
             ByDateAsc,
             ByDateDesc
+        }
+
+        public decimal GetPriceLimit(bool minimum)
+        {
+            decimal priceLimit = 0;
+            if (minimum)
+            {
+                priceLimit = context.Products.Min(p => p.Price);
+            }
+            else
+            {
+                priceLimit = context.Products.Max(p => p.Price);
+            }
+
+            return priceLimit;
         }
     }
 }
