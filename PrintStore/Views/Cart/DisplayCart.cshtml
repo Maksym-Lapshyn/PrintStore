@@ -1,0 +1,93 @@
+﻿@using PrintStore.Domain.Entities
+@model Cart
+
+@{
+    ViewBag.Title = "DisplayCart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Your shopping cart</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-condensed table-striped table-responsive">
+            <tr>
+                <th style="width:10%;">Product</th>
+                <th style="width:5%;">Quantity</th>
+                <th style="width:30%;">Description</th>
+                <th style="width:25%;">Image</th>
+                <th style="width:15%;">Actions</th>
+                <th style="width:15%;">Price</th>
+            </tr>
+
+            @foreach (CartLine cartLine in Model.CartLines)
+            {
+                <tr>
+                    <td>@cartLine.Product.Name</td>
+                    <td>@cartLine.Quantity</td>
+                    <td>@cartLine.Product.Description</td>
+                    <td><img src="~/Images/@cartLine.Product.SmallImagePath" width="200" height="150" /></td>
+                    <td>
+                        @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
+                        {
+                            <input type="hidden" name="productId" value=@cartLine.Product.ProductId />
+                            <input type="submit" value="Remove" class="btn btn-danger" />
+                        }
+                    </td>
+                    <td>@(cartLine.Product.Price * cartLine.Quantity)</td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    <div class="panel-footer">
+        @if (Request.IsAuthenticated && Model.TotalPrice != default(decimal))
+        {
+            using (Html.BeginForm("CheckOut", "Cart", FormMethod.Post))
+            {
+                <input type="submit" class="btn btn-primary btn-lg" value="Check out" />
+            }
+        }
+        else
+        {
+            <p>
+                Total price - $@Model.TotalPrice &nbsp;
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Check out</button>
+            </p>
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+                    @if (Model.TotalPrice == default(decimal))
+                    {
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Error</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Your cart is empty!</p>
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                        </div>
+
+                    }
+                    else
+                    {
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Error</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Only registered users can check out!</p>
+                        </div>
+                        <div class="modal-footer">
+                            @Html.ActionLink("Register", "Register", "Account", null, new { @class = "btn btn-primary pull-left", @id = "registerLink" })
+                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

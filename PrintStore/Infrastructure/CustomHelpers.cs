@@ -8,15 +8,22 @@ namespace PrintStore.Infrastructure
 {
     public static class CustomHelpers
     {
-        public static MvcHtmlString CategoryDropDownList(this HtmlHelper helper, string name, Dictionary<int, string> categories, Object htmlAttributes)
+        public static MvcHtmlString SelectedPriceHelper(this HtmlHelper helper, string name, decimal value, decimal defaultValue)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem() { Selected = true, Text = "All", Value = "All" });
-            foreach (var category in categories)
+            TagBuilder input = new TagBuilder("input");
+            input.AddCssClass("form-control");
+            input.Attributes.Add("name", name);
+            input.Attributes.Add("type", "text");
+            if (value != default(Decimal))
             {
-                items.Add(new SelectListItem() { Text = category.Value, Value = category.Key.ToString() });
+                input.Attributes.Add("value", value.ToString());
             }
-            return System.Web.Mvc.Html.SelectExtensions.DropDownList(helper, name, items, htmlAttributes);
+            else
+            {
+                input.Attributes.Add("value", defaultValue.ToString());
+            }
+
+            return new MvcHtmlString(input.ToString());
         }
     }
 }

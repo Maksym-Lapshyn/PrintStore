@@ -1,28 +1,115 @@
 ﻿@using PrintStore.Domain.Entities
-@using PrintStore.Domain.Concrete
-@model List<Product>
+@using PrintStore.Infrastructure
+@model PrintStore.Models.ProductsViewModel
 
 @{
-    ViewBag.Title = "GetProducts";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
-<div class="row">
-    @foreach (Product product in Model)
-    {
-        <div class="col-sm-6 col-lg-4">
-            <div class="thumbnail">
-                <img src="~/Images/@product.SmallImagePath" alt="@product.Name" />
-                <div class="caption">
-                    <h3>@product.Name</h3>
-                    <p><span class="label label-default label-price">$@product.Price</span></p>
-                    <p>
-                        @Html.ActionLink("Add to cart", "AddProductToCart", "Cart", null, new { @class = "btn btn-primary btn-lg" })
-                        @Html.ActionLink("Details", "GetProductDetails", "Product", new { productId = product.ProductId }, new { @class = "btn btn-default pull-right btn-lg" })
-                    </p>
-                </div>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Products</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("PrintStore", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Categories", "GetCategories", "Product")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
-    }
-</div>
+    </div>
 
+    <div class="container-fluid wrapper">
+        <div class="column-left">
+            @using (Html.BeginForm("GetProducts", "Product", FormMethod.Post))
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Filters</h3>
+                    </div>
+                    <div class="panel-body">
+                        @Html.ValidationSummary()
+                        @Html.HiddenFor(m => m.Filter.CategoryId)
 
+                        <p>@Html.LabelFor(m => m.Filter.SelectedMinimum, string.Format("Minimum price (${0})", Model.Filter.MinimumLimit))</p>
+                        @Html.SelectedPriceHelper("Filter.SelectedMinimum", Model.Filter.SelectedMinimum, Model.Filter.MinimumLimit)
+
+                        <p>@Html.LabelFor(m => m.Filter.SelectedMaximum, string.Format("Maximum price (${0})", Model.Filter.MaximumLimit))</p>
+                        @Html.SelectedPriceHelper("Filter.SelectedMaximum", Model.Filter.SelectedMaximum, Model.Filter.MaximumLimit)
+
+                        <p>@Html.LabelFor(m => m.Filter.Material)</p>
+                        <p>@Html.DropDownListFor(m => m.Filter.Material, new SelectList(Enum.GetNames(Model.Filter.Material.GetType()), Model.Filter.Material.ToString()), new { @class = "form-control" })</p>
+
+                        <p>@Html.LabelFor(m => m.Filter.Texture)</p>
+                        <p>@Html.DropDownListFor(m => m.Filter.Texture, new SelectList(Enum.GetNames(Model.Filter.Texture.GetType()), Model.Filter.Texture.ToString()), new { @class = "form-control" })</p>
+
+                        <p>@Html.LabelFor(m => m.Filter.Size)</p>
+                        <p>@Html.DropDownListFor(m => m.Filter.Size, new SelectList(Enum.GetNames(Model.Filter.Size.GetType()), Model.Filter.Size.ToString()), new { @class = "form-control" })</p>
+
+                        <p>@Html.LabelFor(m => m.Filter.SortOrder, "Sort order")</p>
+                        <p>@Html.DropDownListFor(m => m.Filter.SortOrder, new SelectList(Enum.GetNames(Model.Filter.SortOrder.GetType()), Model.Filter.SortOrder.ToString()), new { @class = "form-control" })</p>
+                    </div>
+                    <div class="panel-footer">
+                        <input type="submit" value="Apply filters" class="btn btn-primary" />
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="column-center">
+            <div class="row">
+                @foreach (Product product in Model.Products)
+                {
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="thumbnail">
+                            <img src="~/Images/@product.SmallImagePath" alt="@product.Name" />
+                            <div class="caption">
+                                <h3>@product.Name</h3>
+                                @using (Html.BeginForm("AddToCart", "Cart", FormMethod.Post))
+                                {
+                                    <p><span class="label label-default label-price">$@product.Price</span><input type="number" name="quantity" min="1" max="1000" value="1" class="form-control pull-right" style="width:100px; height:51px;"/></p>
+                                    <input type="hidden" name="productId" value=@product.ProductId />
+                                    @Html.ActionLink("Details", "GetProductDetails", "Product", new { productId = product.ProductId }, new { @class = "btn btn-default btn-lg" })
+                                    <input type="submit" value="Add to cart" class="btn btn-primary btn-lg pull-right" />
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="column-right">
+            &nbsp;
+        </div>
+    </div>
+
+    <div class="container">
+        <hr />
+        <footer>
+            <p>@DateTime.Now.Year - PrintStore&copy; - All rights reserved</p>
+        </footer>
+    </div>
+
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+</body>
+</html>

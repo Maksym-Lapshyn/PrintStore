@@ -26,21 +26,19 @@
                     <li>@Html.ActionLink("Categories", "GetCategories", "Product")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
+                @{Html.RenderAction("DisplayCartSummary", "Cart"); }
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
 
     <div class="container-fluid wrapper">
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-success">@TempData["message"]</div>
+        }
         <div class="column-left" id="column-left">
-            @if(ViewContext.RouteData.GetRequiredString("controller") == "Product")
-            {
-                { Html.RenderAction("DisplayFilter", "Product"); }
-            }
-            else
-            {
-                <p>&nbsp;</p>
-            }
+            &nbsp;
         </div>
         <div class="column-center">
             @RenderBody()
@@ -60,6 +58,7 @@
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    @RenderSection("scripts", required: false)
 </body>
 </html>
 

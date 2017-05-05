@@ -34,6 +34,14 @@ namespace PrintStore.Domain.Concrete
             }
         }
 
+        public IEnumerable<Order> Orders
+        {
+            get
+            {
+                return context.Orders.Where(o => !o.IsDeleted);
+            }
+        }
+
         /// <summary>
         /// Location for temporary image that is uploaded with product
         /// </summary>
@@ -168,46 +176,6 @@ namespace PrintStore.Domain.Concrete
             return product;
         }
 
-        public IEnumerable<Product> SortProducts(IEnumerable<Product> products, string option)
-        {
-            if (option == SortingOptions.ByNameAsc.ToString())
-            {
-                products = products.OrderBy(p => p.Name);
-            }
-            else if (option == SortingOptions.ByNameDesc.ToString())
-            {
-                products = products.OrderByDescending(p => p.Name);
-            }
-            else if (option == SortingOptions.ByPriceAsc.ToString())
-            {
-                products = products.OrderBy(p => p.Price);
-            }
-            else if (option == SortingOptions.ByPriceDesc.ToString())
-            {
-                products = products.OrderByDescending(p => p.Price);
-            }
-            else if (option == SortingOptions.ByDateAsc.ToString())
-            {
-                products = products.OrderBy(p => p.DateAdded);
-            }
-            else if (option == SortingOptions.ByDateDesc.ToString())
-            {
-                products = products.OrderByDescending(p => p.DateAdded);
-            }
-
-            return products;
-        }
-
-        public enum SortingOptions
-        {
-            ByNameAsc,
-            ByNameDesc,
-            ByPriceAsc,
-            ByPriceDesc,
-            ByDateAsc,
-            ByDateDesc
-        }
-
         public decimal GetPriceLimit(bool minimum)
         {
             decimal priceLimit = 0;
@@ -221,6 +189,17 @@ namespace PrintStore.Domain.Concrete
             }
 
             return priceLimit;
+        }
+
+        public void SaveOrder(Cart cart, string userId)
+        {
+            Order order = new Order();
+            order.DateAdded = DateTime.UtcNow;
+            order.UserId = userId;
+            order.CartLines = cart.CartLines;
+            order.TotalPrice = order.CartLines.Sum(c => c.Product.Price * c.Quantity);
+            context.Orders.Add(order);
+            context.SaveChanges();
         }
     }
 }

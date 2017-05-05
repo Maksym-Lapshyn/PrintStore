@@ -11,10 +11,10 @@ namespace PrintStore.Infrastructure
     {
         public override bool IsValid(object value)
         {
-            FilterViewModel filters = value as FilterViewModel;
-            if (filters.SelectedMinimum < filters.MinimumLimit || filters.SelectedMinimum > filters.MaximumLimit
-                || filters.SelectedMaximum > filters.MaximumLimit || filters.SelectedMaximum < filters.MinimumLimit
-                || (filters.SelectedMaximum == filters.SelectedMinimum && filters.SelectedMinimum == 0))
+            FilterViewModel filter = value as FilterViewModel;
+            if (filter.SelectedMinimum < filter.MinimumLimit || filter.SelectedMinimum > filter.MaximumLimit
+                || filter.SelectedMaximum > filter.MaximumLimit || filter.SelectedMaximum < filter.MinimumLimit
+                || (filter.SelectedMaximum == filter.SelectedMinimum && filter.SelectedMinimum == 0))
             {
                 return false;
             }

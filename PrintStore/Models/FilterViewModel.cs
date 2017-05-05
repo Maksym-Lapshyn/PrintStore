@@ -14,7 +14,7 @@ namespace PrintStore.Models
     {
         EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
 
-        public string Category { get; set; }
+        public int CategoryId { get; set; }
 
         public decimal SelectedMinimum { get; set; }
 

@@ -22,7 +22,24 @@ namespace PrintStore.Controllers
         public ActionResult GetProducts(int categoryId)
         {
             IEnumerable<Product> products = layer.Products.Where(p => p.CategoryId == categoryId && p.IsDeleted == false);
-            return View(products.ToList());
+            ProductsViewModel model = new ProductsViewModel();
+            model.Products = products;
+            model.Filter = new FilterViewModel();
+            model.Filter.CategoryId = categoryId;
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult GetProducts(ProductsViewModel model)
+        {
+            model.Products = layer.Products.Where(p => p.CategoryId == model.Filter.CategoryId && p.IsDeleted == false);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            model.Products = ApplyFilters(model.Products, model.Filter);
+            return View(model);
         }
 
         public ActionResult GetProductDetails(int productId)
@@ -31,33 +48,9 @@ namespace PrintStore.Controllers
             return View(product);
         }
 
-        [HttpGet]
-        public PartialViewResult DisplayFilter()
-        {
-            return PartialView(new FilterViewModel());
-        }
-
-        [HttpPost]
-        public ActionResult DisplayFilter(FilterViewModel filter)
-        {
-            if (!ModelState.IsValid)
-            {
-                return PartialView(filter);
-            }
-
-            IEnumerable<Product> products = layer.Products.Where(p => p.IsDeleted == false);
-            products = ApplyFilters(products, filter);
-            return View("GetProducts", products.ToList());
-        }
-
-
         private IEnumerable<Product> ApplyFilters(IEnumerable<Product> products, FilterViewModel filter)
         {
             products = products.Where(p => p.Price >= filter.SelectedMinimum && p.Price <= filter.SelectedMaximum);
-            if (filter.Category != "All")
-            {
-                products = products.Where(p => p.CategoryId == Int32.Parse(filter.Category));
-            }
 
             if (filter.Material.ToString() != "All")
             {
@@ -76,7 +69,37 @@ namespace PrintStore.Controllers
 
             if (filter.SortOrder.ToString() != "None")
             {
-                products = layer.SortProducts(products, filter.SortOrder.ToString());
+                products = SortProducts(products, filter.SortOrder);
+            }
+
+            return products;
+        }
+
+        private IEnumerable<Product> SortProducts(IEnumerable<Product> products, PrintStore.Models.SortOrder sortOrder)
+        {
+            if (sortOrder == PrintStore.Models.SortOrder.NameAsc)
+            {
+                products = products.OrderBy(p => p.Name);
+            }
+            else if (sortOrder == PrintStore.Models.SortOrder.NameDesc)
+            {
+                products = products.OrderByDescending(p => p.Name);
+            }
+            else if (sortOrder == PrintStore.Models.SortOrder.PriceAsc)
+            {
+                products = products.OrderBy(p => p.Price);
+            }
+            else if (sortOrder == PrintStore.Models.SortOrder.PriceDesc)
+            {
+                products = products.OrderByDescending(p => p.Price);
+            }
+            else if (sortOrder == PrintStore.Models.SortOrder.DateAsc)
+            {
+                products = products.OrderBy(p => p.DateAdded);
+            }
+            else if (sortOrder == PrintStore.Models.SortOrder.DateDesc)
+            {
+                products = products.OrderByDescending(p => p.DateAdded);
             }
 
             return products;

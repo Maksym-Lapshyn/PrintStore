@@ -12,11 +12,6 @@ namespace PrintStore.Controllers
     {
         EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         public ActionResult GetCategories()
         {
             IEnumerable<Category> categories = layer.Categories.Where(c => c.IsDeleted == false);
