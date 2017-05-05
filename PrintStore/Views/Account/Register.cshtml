@@ -1,6 +1,7 @@
 ﻿@model PrintStore.Models.RegisterViewModel
 @{
     ViewBag.Title = "Register";
+    Model.UserRoles = "User";
 }
 
 <h2>@ViewBag.Title.</h2>
@@ -8,6 +9,7 @@
 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.UserRoles)
     <h4>Create a new account.</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
