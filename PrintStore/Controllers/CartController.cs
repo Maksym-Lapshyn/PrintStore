@@ -29,8 +29,7 @@ namespace PrintStore.Controllers
         public ActionResult AddToCart(int productId, int quantity)
         {
             Cart cart = GetCart();
-            Product product = layer.Products.Where(p => p.ProductId == productId).First();
-            cart.AddCartLine(product, quantity);
+            cart.AddCartLine(productId, quantity);
             return View("DisplayCart", cart);
         }
 
@@ -38,8 +37,8 @@ namespace PrintStore.Controllers
         public ActionResult RemoveFromCart(int productId)
         {
             Cart cart = GetCart();
+            cart.RemoveCartLine(productId);
             Product product = layer.Products.Where(p => p.ProductId == productId).First();
-            cart.RemoveCartLine(product);
             TempData["message"] = string.Format("{0} was successfully removed from your cart", product.Name);
             return View("DisplayCart", cart);
         }
@@ -48,11 +47,11 @@ namespace PrintStore.Controllers
         public ActionResult CheckOut()
         {
             Cart cart = GetCart();
-            Session.Abandon();
+            Session.Clear();
             string userId = User.Identity.GetUserId<string>();
             layer.SaveOrder(cart, userId);
             TempData["message"] = string.Format("Your order was successfully registered");
-            return RedirectToAction("GetCategories", "Product");
+            return View("DisplayCart", GetCart());
         }
 
         private Cart GetCart()

@@ -80,6 +80,10 @@
     <Compile Include="Migrations\201705041455017_fourth.Designer.cs">
       <DependentUpon>201705041455017_fourth.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705050843029_fifth.cs" />
+    <Compile Include="Migrations\201705050843029_fifth.Designer.cs">
+      <DependentUpon>201705050843029_fifth.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -98,6 +102,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705041455017_fourth.resx">
       <DependentUpon>201705041455017_fourth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705050843029_fifth.resx">
+      <DependentUpon>201705050843029_fifth.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,55 @@
+﻿@using PrintStore.Domain.Entities
+@using PrintStore.Domain.Concrete
+@using Microsoft.AspNet.Identity
+@model List<Order>
+
+@{
+    ViewBag.Title = "User profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Your profile
+    </div>
+    <div class="panel-body">
+        @if (Model.Count() != 0)
+        {
+            <table class="table table-condensed table-bordered table-striped">
+                <tr>
+                    <th>Id</th>
+                    <th>Date added</th>
+                    <th>Status</th>
+                    <th>Total price</th>
+                    <th>Products</th>
+                </tr>
+                @foreach (Order order in Model.Where(o => !o.IsDeleted))
+                {
+                    <tr>
+                        <td>@order.OrderId</td>
+                        <td>@order.DateAdded</td>
+                        <td>@order.OrderStatus</td>
+                        <td>$@order.TotalPrice</td>
+                        <td>
+                            @foreach (CartLine cartLine in order.CartLines)
+                            {
+                                Product product = layer.Products.Where(p => p.ProductId == cartLine.ProductId).First();
+                                <p>@string.Format("{0}({1}) x {2}", product.Name, product.Price, cartLine.Quantity)</p>
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p>Your order list is empty!</p>
+        }
+    </div>
+    <div class="panel-footer">
+        @Html.ActionLink("Manage profile", "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "btn btn-primary btn-lg", title = "Manage" })
+    </div>
+</div>
+
+

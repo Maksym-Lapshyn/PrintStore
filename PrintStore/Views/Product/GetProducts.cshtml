@@ -33,6 +33,7 @@
                     <li>@Html.ActionLink("Categories", "GetCategories", "Product")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
+                @{Html.RenderAction("DisplayCartSummary", "Cart"); }
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
@@ -76,6 +77,10 @@
         </div>
         <div class="column-center">
             <div class="row">
+                @if(Model.Products.Count() == 0)
+                {
+                    <p class="text-center">There are no products that match your filter!</p>
+                }
                 @foreach (Product product in Model.Products)
                 {
                     <div class="col-sm-6 col-lg-4">

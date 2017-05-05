@@ -172,6 +172,7 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -269,6 +270,7 @@
     <Content Include="Views\Product\GetProducts.cshtml" />
     <Content Include="Views\Cart\DisplayCart.cshtml" />
     <Content Include="Views\Cart\DisplayCartSummary.cshtml" />
+    <Content Include="Views\Profile\DisplayProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

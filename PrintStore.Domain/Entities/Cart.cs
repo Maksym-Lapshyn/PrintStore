@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PrintStore.Domain.Concrete;
 using System.Threading.Tasks;
 
 namespace PrintStore.Domain.Entities
@@ -9,19 +10,18 @@ namespace PrintStore.Domain.Entities
     public class Cart
     {
         public List<CartLine> CartLines { get; set; }
-        public decimal TotalPrice { get { return CartLines.Sum(c => c.Product.Price * c.Quantity); } }
         public int Quantity { get { return CartLines.Count; } }
         public Cart()
         {
             CartLines = new List<CartLine>();
         }
 
-        public void AddCartLine(Product product, int quantity)
+        public void AddCartLine(int productId, int quantity)
         {
-            CartLine cartLine = CartLines.Where(c => c.Product.ProductId == product.ProductId).FirstOrDefault();
+            CartLine cartLine = CartLines.Where(c => c.ProductId == productId).FirstOrDefault();
             if (cartLine == null)
             {
-                CartLine newCartLine = new CartLine() { Product = product, Quantity = quantity };
+                CartLine newCartLine = new CartLine() { ProductId = productId, Quantity = quantity };
                 CartLines.Add(newCartLine);
             }
             else
@@ -30,9 +30,16 @@ namespace PrintStore.Domain.Entities
             }
         }
 
-        public void RemoveCartLine(Product product)
+        public decimal ComputeTotalPrice()
         {
-            CartLines.RemoveAll(c => c.Product.ProductId == product.ProductId);
+            EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
+            decimal totalPrice = CartLines.Sum(c => layer.Products.Where(p => p.ProductId == c.ProductId).First().Price * c.Quantity);
+            return totalPrice;
+        }
+
+        public void RemoveCartLine(int productId)
+        {
+            CartLines.RemoveAll(c => c.ProductId == productId);
         }
 
         public void Clear()

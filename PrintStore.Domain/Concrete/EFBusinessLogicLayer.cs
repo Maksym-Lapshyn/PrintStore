@@ -197,7 +197,7 @@ namespace PrintStore.Domain.Concrete
             order.DateAdded = DateTime.UtcNow;
             order.UserId = userId;
             order.CartLines = cart.CartLines;
-            order.TotalPrice = order.CartLines.Sum(c => c.Product.Price * c.Quantity);
+            order.TotalPrice = cart.ComputeTotalPrice();
             context.Orders.Add(order);
             context.SaveChanges();
         }
