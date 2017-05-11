@@ -1,0 +1,59 @@
+﻿@using PrintStore.Models
+@using PrintStore.Infrastructure.Concrete
+@model List<ApplicationUser>
+
+@{
+    ViewBag.Title = "GetUsers";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    IdentityUserLayer layer = new IdentityUserLayer();
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Users</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-condensed table-striped table-responsive">
+            <tr>
+                <th style="width:20%;">Id</th>
+                <th style="width:20%;">Email</th>
+                <th style="width:20%;">IsBlocked</th>
+                <th style="width:20%;">Role</th>
+                <th style="width:20%;">Actions</th>
+            </tr>
+            @foreach (ApplicationUser user in Model)
+            {
+                if (user.Email == "admin@gmail.com")
+                {
+                    continue;
+                }
+                <tr>
+                    @using (Html.BeginForm("ModifyUser", "Admin", new { userId = user.Id }, FormMethod.Post, null))
+                    {
+
+                        <td>@user.Id</td>
+                        <td>@user.Email</td>
+                        <td>
+                            @Html.DropDownList("IsBlocked", new[] {
+                                new SelectListItem { Value = "1", Text = "True", Selected = user.IsBlocked },
+                                new SelectListItem { Value = "0", Text = "False", Selected = !user.IsBlocked }
+                            }, new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @Html.DropDownList("Role", new[] {
+                                new SelectListItem { Value = "User", Text = "User", Selected = layer.GetRoleName(user.Id) == "User" },
+                                new SelectListItem { Value = "Manager", Text = "Manager", Selected = layer.GetRoleName(user.Id) == "Manager" }
+                            }, new { @class = "form-control" })
+                        </td>
+                        <td>
+                            <input type="submit" value="Save changes" class="btn btn-primary" />
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="panel-footer">
+    </div>
+</div>
+

@@ -5,12 +5,68 @@ using System.Web;
 using System.Web.Mvc;
 using PrintStore.Domain.Concrete;
 using PrintStore.Domain.Entities;
+using PrintStore.Models;
+using PrintStore.Infrastructure.Concrete;
 
 namespace PrintStore.Controllers
 {
+    [Authorize(Roles = "Admin, Manager")]
     public class AdminController : Controller
     {
         EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
+
+        IdentityUserLayer userLayer = new IdentityUserLayer();
+
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult GetUsers()
+        {
+            IEnumerable<ApplicationUser> users = userLayer.Users;
+            return View(users.ToList());
+        }
+
+        [HttpPost]
+        public ActionResult ModifyUser(string userId, string role, int isBlocked)
+        {
+            if (isBlocked == 1)
+            {
+                userLayer.BlockUser(userId);
+            }
+            else
+            {
+                userLayer.UnblockUser(userId);
+            }
+
+            userLayer.ChangeUserRole(userId, role);
+            TempData["message"] = string.Format("User profile was successfully updated");
+            return RedirectToAction("GetUsers");
+        }
+
+        public ActionResult GetOrders()
+        {
+            IEnumerable<Order> orders = layer.Orders;
+            return View(orders.ToList());
+        }
+
+        [HttpPost]
+        public ActionResult ModifyOrder(int orderId, string orderStatus, int isDeleted)
+        {
+            if (isDeleted == 1)
+            {
+                layer.DeleteOrder(orderId);
+            }
+            else
+            {
+                layer.RestoreOrder(orderId);
+            }
+
+            layer.ChangeOrderStatus(orderId, orderStatus);
+            TempData["message"] = string.Format("Order was successfully updated");
+            return RedirectToAction("GetOrders");
+        }
 
         public ActionResult GetCategories()
         {

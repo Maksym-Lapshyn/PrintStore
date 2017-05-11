@@ -18,10 +18,12 @@ namespace PrintStore.Domain.Entities
 
         public void AddCartLine(int productId, int quantity)
         {
+            EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
+            Product product = layer.Products.Where(p => p.ProductId == productId).First();
             CartLine cartLine = CartLines.Where(c => c.ProductId == productId).FirstOrDefault();
             if (cartLine == null)
             {
-                CartLine newCartLine = new CartLine() { ProductId = productId, Quantity = quantity };
+                CartLine newCartLine = new CartLine() { ProductId = productId, Product = product, Quantity = quantity };
                 CartLines.Add(newCartLine);
             }
             else
@@ -33,7 +35,7 @@ namespace PrintStore.Domain.Entities
         public decimal ComputeTotalPrice()
         {
             EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
-            decimal totalPrice = CartLines.Sum(c => layer.Products.Where(p => p.ProductId == c.ProductId).First().Price * c.Quantity);
+            decimal totalPrice = CartLines.Sum(c => c.Product.Price * c.Quantity);
             return totalPrice;
         }
 

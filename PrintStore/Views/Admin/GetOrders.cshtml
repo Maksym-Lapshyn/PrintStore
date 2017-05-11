@@ -1,0 +1,68 @@
+﻿@using PrintStore.Domain.Entities
+@using PrintStore.Domain.Concrete
+@model List<Order>
+
+@{
+    ViewBag.Title = "GetOrders";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Orders</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-condensed table-striped table-responsive">
+            <tr>
+                <th style="width:10%;">Id</th>
+                <th style="width:15%;">UserId</th>
+                <th style="width:10%;">DateAdded</th>
+                <th style="width:10%;">IsDeleted</th>
+                <th style="width:10%;">Status</th>
+                <th style="width:20%;">Cartlines</th>
+                <th style="width:10%;">Total</th>
+                <th style="width:15%;">Actions</th>
+            </tr>
+            @foreach (Order order in Model)
+            {
+                <tr>
+                    @using (Html.BeginForm("ModifyOrder", "Admin", new { orderId = order.OrderId }, FormMethod.Post, null))
+                    {
+
+                        <td>@order.OrderId</td>
+                        <td>@order.UserId</td>
+                        <td>@order.DateAdded</td>
+                        <td>
+                            @Html.DropDownList("IsDeleted", new[] {
+                                new SelectListItem { Value = "1", Text = "True", Selected = order.IsDeleted },
+                                new SelectListItem { Value = "0", Text = "False", Selected = !order.IsDeleted }
+                            }, new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @Html.DropDownList("OrderStatus", new[] {
+                                new SelectListItem { Value = OrderStatus.Registered.ToString(), Text = OrderStatus.Registered.ToString(), Selected = order.OrderStatus == OrderStatus.Registered},
+                                new SelectListItem { Value = OrderStatus.Paid.ToString(), Text = OrderStatus.Paid.ToString(), Selected = order.OrderStatus == OrderStatus.Paid},
+                                new SelectListItem { Value = OrderStatus.Canceled.ToString(), Text = OrderStatus.Canceled.ToString(), Selected = order.OrderStatus == OrderStatus.Canceled}
+                            }, new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @foreach (CartLine cartLine in order.CartLines)
+                            {
+                                Product product = layer.Products.Where(p => p.ProductId == cartLine.ProductId).First();
+                                <p>@string.Format("{0}({1}) x {2}", product.Name, product.Price, cartLine.Quantity)</p>
+                            }
+                        </td>
+                        <td>$@order.TotalPrice</td>
+                        <td>
+                            <input type="submit" value="Save changes" class="btn btn-primary" />
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="panel-footer">
+    </div>
+</div>
+

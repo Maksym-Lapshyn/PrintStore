@@ -29,9 +29,9 @@ namespace PrintStore
                 role.Name = "Admin";
                 roleManager.Create(role);
                 ApplicationUser user = new ApplicationUser();
-                user.UserName = "Admin";
-                user.Email = "admin@mail.ru";
-                string password = "adminadminadmin";
+                user.UserName = "admin@gmail.com";
+                user.Email = "admin@gmail.com";
+                string password = "ggglolpvp";
                 IdentityResult result = userManager.Create(user, password);
                 if (result.Succeeded)
                 {

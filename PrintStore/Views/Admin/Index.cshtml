@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container">
+    <h1>Welcome to admin section</h1>
+    <h3>Here you can manage categories, products, users and their orders</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Items</h2>
+            <p>
+                Add new categories and products, edit their content, select images and many more.
+            </p>
+            <p>@Html.ActionLink("Manage Items", "GetCategories", "Admin", new { @class = "btn btn-primary btn-lg" })</p>
+        </div>
+        <div class="col-md-4">
+            <h2>Users</h2>
+            <p>
+                View current users, change their roles and disable their profiles.
+            </p>
+            <p>@Html.ActionLink("Manage Users", "GetUsers", "Admin", new { @class = "btn btn-primary btn-lg" })</p>
+        </div>
+        <div class="col-md-4">
+            <h2>Orders</h2>
+            <p>
+                Browse registered orders and change their status upon completion.
+            </p>
+            <p>@Html.ActionLink("Manage Orders", "GetOrders", "Admin", new { @class = "btn btn-primary btn-lg" })</p>
+        </div>
+    </div>
+</div>

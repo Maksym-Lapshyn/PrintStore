@@ -11,17 +11,43 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
 </head>
 
 <body>
-    <div>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("PrintStore", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Manage Items", "GetCategories", "Admin")</li>
+                    <li>@Html.ActionLink("Manage Users", "GetUsers", "Admin")</li>
+                    <li>@Html.ActionLink("Manage Orders", "GetOrders", "Admin")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid wrapper">
         @if (TempData["message"] != null)
         {
             <div class="alert alert-success">@TempData["message"]</div>
         }
         @RenderBody()
     </div>
-    
+    <div class="container">
+        <hr />
+        <footer>
+            <p>@DateTime.Now.Year - PrintStore&copy; - All rights reserved</p>
+        </footer>
+    </div>
+
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
 </body>

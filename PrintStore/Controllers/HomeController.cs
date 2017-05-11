@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PrintStore.Infrastructure;
 
 namespace PrintStore.Controllers
 {
+    [ActionLogging]
+    [ExceptionLogging]
     public class HomeController : Controller
     {
         public ActionResult Index()
@@ -16,13 +19,6 @@ namespace PrintStore.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
 
             return View();
         }

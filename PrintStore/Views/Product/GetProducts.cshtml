@@ -31,7 +31,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Categories", "GetCategories", "Product")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Admin section", "Index", "Admin")</li>
                 </ul>
                 @{Html.RenderAction("DisplayCartSummary", "Cart"); }
                 @Html.Partial("_LoginPartial")

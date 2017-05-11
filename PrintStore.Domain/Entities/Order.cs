@@ -25,6 +25,7 @@ namespace PrintStore.Domain.Entities
     public enum OrderStatus
     {
         Registered,
-        Processed
+        Paid,
+        Canceled
     }
 }

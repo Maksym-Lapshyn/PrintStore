@@ -38,7 +38,7 @@ namespace PrintStore.Domain.Concrete
         {
             get
             {
-                return context.Orders.Where(o => !o.IsDeleted);
+                return context.Orders;
             }
         }
 
@@ -62,7 +62,7 @@ namespace PrintStore.Domain.Concrete
             else
             {
                 Category forSave = context.Categories.Find(category.CategoryId);
-                if(forSave != null)
+                if (forSave != null)
                 {
                     forSave.CategoryId = category.CategoryId;
                     forSave.Name = category.Name;
@@ -114,7 +114,7 @@ namespace PrintStore.Domain.Concrete
             else
             {
                 Product forSave = context.Products.Find(product.ProductId);
-                if(forSave != null)
+                if (forSave != null)
                 {
                     forSave.ProductId = product.ProductId;
                     if (product.ImageGuid != default(Guid))
@@ -199,6 +199,41 @@ namespace PrintStore.Domain.Concrete
             order.CartLines = cart.CartLines;
             order.TotalPrice = cart.ComputeTotalPrice();
             context.Orders.Add(order);
+            context.SaveChanges();
+        }
+
+        public Order DeleteOrder(int orderId)
+        {
+            Order order = context.Orders.Find(orderId);
+            order.IsDeleted = true;
+            context.SaveChanges();
+            return order;
+        }
+
+        public Order RestoreOrder(int orderId)
+        {
+            Order order = context.Orders.Find(orderId);
+            order.IsDeleted = false;
+            context.SaveChanges();
+            return order;
+        }
+
+        public void ChangeOrderStatus(int orderId, string orderStatus)
+        {
+            Order order = context.Orders.Find(orderId);
+            if (orderStatus == OrderStatus.Paid.ToString())
+            {
+                order.OrderStatus = OrderStatus.Paid;
+            }
+            else if (orderStatus == OrderStatus.Canceled.ToString())
+            {
+                order.OrderStatus = OrderStatus.Canceled;
+            }
+            else
+            {
+                order.OrderStatus = OrderStatus.Registered;
+            }
+
             context.SaveChanges();
         }
     }

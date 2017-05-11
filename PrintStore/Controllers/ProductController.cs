@@ -6,9 +6,12 @@ using System.Web.Mvc;
 using PrintStore.Domain.Concrete;
 using PrintStore.Domain.Entities;
 using PrintStore.Models;
+using PrintStore.Infrastructure;
 
 namespace PrintStore.Controllers
 {
+    [ActionLogging]
+    [ExceptionLogging]
     public class ProductController : Controller
     {
         EFBusinessLogicLayer layer = new EFBusinessLogicLayer();

@@ -1,11 +1,19 @@
 ﻿@using PrintStore.Domain.Entities
 @using PrintStore.Domain.Concrete
+@using PrintStore.Infrastructure.Concrete
+@using Microsoft.AspNet.Identity
 @model Cart
 
 @{
     ViewBag.Title = "DisplayCart";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
+    IdentityUserLayer userLayer = new IdentityUserLayer();
+    bool userIsBlocked = false;
+    if (Request.IsAuthenticated)
+    {
+        string userId = HttpContext.Current.User.Identity.GetUserId<string>();
+        userIsBlocked = userLayer.Users.Where(u => u.Id == userId).First().IsBlocked;
+    }
 }
 
 <div class="panel panel-default">
@@ -27,20 +35,19 @@
 
                 @foreach (CartLine cartLine in Model.CartLines)
                 {
-                    Product product = layer.Products.Where(p => p.ProductId == cartLine.ProductId).First();
                     <tr>
-                        <td>@product.Name</td>
+                        <td>@cartLine.Product.Name</td>
                         <td>@cartLine.Quantity</td>
-                        <td>@product.Description</td>
-                        <td><img src="~/Images/@product.SmallImagePath" width="200" height="150" /></td>
+                        <td>@cartLine.Product.Description</td>
+                        <td><img src="~/Images/@cartLine.Product.SmallImagePath" width="200" height="150" /></td>
                         <td>
                             @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
                             {
-                                <input type="hidden" name="productId" value=@product.ProductId />
+                                <input type="hidden" name="productId" value=@cartLine.Product.ProductId />
                                 <input type="submit" value="Remove" class="btn btn-danger" />
                             }
                         </td>
-                        <td>@(product.Price * cartLine.Quantity)</td>
+                        <td>@(cartLine.ComputeTotalPrice())</td>
                     </tr>
                 }
 
@@ -52,7 +59,7 @@
         }
     </div>
     <div class="panel-footer">
-        @if (Request.IsAuthenticated && Model.ComputeTotalPrice() != default(decimal))
+        @if (Request.IsAuthenticated && userIsBlocked == false && Model.ComputeTotalPrice() != default(decimal))
         {
             using (Html.BeginForm("CheckOut", "Cart", FormMethod.Post))
             {
@@ -68,35 +75,27 @@
             </p>
             <div class="modal fade" id="myModal" role="dialog">
                 <div class="modal-dialog">
-                    @if (Model.ComputeTotalPrice() == default(decimal))
-                    {
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Error</h4>
-                        </div>
-                        <div class="modal-body">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Error</h4>
+                    </div>
+                    <div class="modal-body">
+                        @if (Model.ComputeTotalPrice() == default(decimal))
+                        {
                             <p>Your cart is empty!</p>
-                        </div>
-                        <div class="modal-footer">
-
-                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-                        </div>
-
-                    }
-                    else
-                    {
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Error</h4>
-                        </div>
-                        <div class="modal-body">
+                        }
+                        else if (userIsBlocked == true)
+                        {
+                            <p>Your account is blocked!</p>
+                        }
+                        else
+                        {
                             <p>Only registered users can check out!</p>
-                        </div>
-                        <div class="modal-footer">
-                            @Html.ActionLink("Register", "Register", "Account", null, new { @class = "btn btn-primary pull-left", @id = "registerLink" })
-                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
-                        </div>
-                    }
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         }

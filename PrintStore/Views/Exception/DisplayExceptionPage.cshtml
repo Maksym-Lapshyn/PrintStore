@@ -1,0 +1,32 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <title>Error</title>
+    <style>
+        body {
+            background-image: url(../Images/Infrastructure/error-bg.jpg);
+            color: white;
+        }
+
+        div {
+            margin-top: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Oops, something went wrong</h1>
+        <hr />
+        <p>We are already working on solving the issue</p>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-lg btn-primary">Back to the main page</a>
+    </div>
+</body>
+</html>

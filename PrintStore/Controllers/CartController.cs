@@ -5,13 +5,20 @@ using System.Web;
 using System.Web.Mvc;
 using PrintStore.Domain.Entities;
 using PrintStore.Domain.Concrete;
+using PrintStore.Models;
 using Microsoft.AspNet.Identity;
+using PrintStore.Infrastructure.Concrete;
+using PrintStore.Infrastructure;
 
 namespace PrintStore.Controllers
 {
+    [ActionLogging]
+    [ExceptionLogging]
     public class CartController : Controller
     {
         EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
+
+        IdentityUserLayer userLayer = new IdentityUserLayer();
 
         public ActionResult DisplayCartSummary()
         {

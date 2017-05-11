@@ -16,6 +16,8 @@ namespace PrintStore.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public bool IsBlocked { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
