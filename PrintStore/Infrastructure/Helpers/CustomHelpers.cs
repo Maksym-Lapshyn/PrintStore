@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace PrintStore.Infrastructure
+namespace PrintStore.Infrastructure.Helpers
 {
     public static class CustomHelpers
     {

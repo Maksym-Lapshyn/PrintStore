@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PrintStore.Domain.Entities;
 
-namespace PrintStore.Domain.Abstract
+namespace PrintStore.Domain.Infrastructure.Abstract
 {
     /// <summary>
     /// Basic functionality of a business logic layer

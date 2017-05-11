@@ -51,68 +51,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IBusinessLogicLayer.cs" />
-    <Compile Include="Concrete\EFBusinessLogicLayer.cs" />
-    <Compile Include="Concrete\EFDbContext.cs" />
+    <Compile Include="Infrastructure\Abstract\IBusinessLogicLayer.cs" />
+    <Compile Include="Infrastructure\Concrete\EFBusinessLogicLayer.cs" />
+    <Compile Include="Infrastructure\Contexts\EFDbContext.cs" />
     <Compile Include="Entities\Cart.cs" />
     <Compile Include="Entities\CartLine.cs" />
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\Order.cs" />
     <Compile Include="Entities\Product.cs" />
-    <Compile Include="Migrations\201704291005068_InitialCreate.cs" />
-    <Compile Include="Migrations\201704291005068_InitialCreate.Designer.cs">
-      <DependentUpon>201704291005068_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704291343215_29\4\2017.cs" />
-    <Compile Include="Migrations\201704291345391_first.cs" />
-    <Compile Include="Migrations\201704291345391_first.Designer.cs">
-      <DependentUpon>201704291345391_first.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705021029114_second.cs" />
-    <Compile Include="Migrations\201705021029114_second.Designer.cs">
-      <DependentUpon>201705021029114_second.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705041446466_third.cs" />
-    <Compile Include="Migrations\201705041446466_third.Designer.cs">
-      <DependentUpon>201705041446466_third.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705041455017_fourth.cs" />
-    <Compile Include="Migrations\201705041455017_fourth.Designer.cs">
-      <DependentUpon>201705041455017_fourth.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705050843029_fifth.cs" />
-    <Compile Include="Migrations\201705050843029_fifth.Designer.cs">
-      <DependentUpon>201705050843029_fifth.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705090922213_sixth.cs" />
-    <Compile Include="Migrations\201705090922213_sixth.Designer.cs">
-      <DependentUpon>201705090922213_sixth.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704291005068_InitialCreate.resx">
-      <DependentUpon>201704291005068_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704291345391_first.resx">
-      <DependentUpon>201704291345391_first.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705021029114_second.resx">
-      <DependentUpon>201705021029114_second.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705041446466_third.resx">
-      <DependentUpon>201705041446466_third.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705041455017_fourth.resx">
-      <DependentUpon>201705041455017_fourth.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705050843029_fifth.resx">
-      <DependentUpon>201705050843029_fifth.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705090922213_sixth.resx">
-      <DependentUpon>201705090922213_sixth.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

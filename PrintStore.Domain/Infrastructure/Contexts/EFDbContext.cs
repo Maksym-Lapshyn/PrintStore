@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Data.Entity;
 using PrintStore.Domain.Entities;
 
-namespace PrintStore.Domain.Concrete
+namespace PrintStore.Domain.Infrastructure.Contexts
 {
     public class EFDbContext : DbContext
     {

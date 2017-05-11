@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PrintStore.Domain.Abstract;
+using PrintStore.Domain.Infrastructure.Abstract;
+using PrintStore.Domain.Infrastructure.Contexts;
 using PrintStore.Domain.Entities;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Web;
 
-namespace PrintStore.Domain.Concrete
+namespace PrintStore.Domain.Infrastructure.Concrete
 {
     /// <summary>
     /// Business logic layer based on Entity Framework

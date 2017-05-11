@@ -5,7 +5,7 @@ using System.Web;
 using PrintStore.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace PrintStore.Infrastructure
+namespace PrintStore.Infrastructure.Attributes
 {
     public class FilterAttribute : ValidationAttribute
     {

@@ -8,7 +8,6 @@ namespace PrintStore.Controllers
 {
     public class ExceptionController : Controller
     {
-        // GET: Exception
         public ActionResult DisplayExceptionPage()
         {
             return View();

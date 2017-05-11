@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using PrintStore.Domain.Concrete;
+using PrintStore.Domain.Infrastructure.Concrete;
 using PrintStore.Domain.Entities;
 using PrintStore.Models;
-using PrintStore.Infrastructure;
+using PrintStore.Infrastructure.Attributes;
 
 namespace PrintStore.Controllers
 {

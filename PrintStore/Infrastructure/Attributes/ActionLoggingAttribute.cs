@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using PrintStore.Infrastructure.Concrete;
 using PrintStore.Models;
 
-namespace PrintStore.Infrastructure
+namespace PrintStore.Infrastructure.Attributes
 {
     public class ActionLoggingAttribute : ActionFilterAttribute
     {

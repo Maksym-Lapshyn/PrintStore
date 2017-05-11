@@ -1,5 +1,5 @@
 ﻿@using PrintStore.Domain.Entities
-@using PrintStore.Domain.Concrete
+@using PrintStore.Domain.Infrastructure.Concrete
 @using PrintStore.Infrastructure.Concrete
 @using Microsoft.AspNet.Identity
 @model Cart
@@ -7,6 +7,7 @@
 @{
     ViewBag.Title = "DisplayCart";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
     IdentityUserLayer userLayer = new IdentityUserLayer();
     bool userIsBlocked = false;
     if (Request.IsAuthenticated)
@@ -32,18 +33,18 @@
                     <th style="width:15%;">Actions</th>
                     <th style="width:15%;">Price</th>
                 </tr>
-
                 @foreach (CartLine cartLine in Model.CartLines)
                 {
+                    Product product = layer.Products.Where(p => p.ProductId == cartLine.ProductId).First();
                     <tr>
-                        <td>@cartLine.Product.Name</td>
+                        <td>@product.Name</td>
                         <td>@cartLine.Quantity</td>
-                        <td>@cartLine.Product.Description</td>
-                        <td><img src="~/Images/@cartLine.Product.SmallImagePath" width="200" height="150" /></td>
+                        <td>@product.Description</td>
+                        <td><img src="~/Images/@product.SmallImagePath" width="200" height="150" /></td>
                         <td>
                             @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
                             {
-                                <input type="hidden" name="productId" value=@cartLine.Product.ProductId />
+                                <input type="hidden" name="productId" value=@cartLine.ProductId />
                                 <input type="submit" value="Remove" class="btn btn-danger" />
                             }
                         </td>

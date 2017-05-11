@@ -182,30 +182,13 @@
     </Compile>
     <Compile Include="Infrastructure\Abstract\ILoggingLayer.cs" />
     <Compile Include="Infrastructure\Abstract\IUserLayer.cs" />
-    <Compile Include="Infrastructure\ActionLoggingAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\ActionLoggingAttribute.cs" />
     <Compile Include="Infrastructure\Contexts\EFLoggingContext.cs" />
     <Compile Include="Infrastructure\Concrete\EFLoggingLayer.cs" />
     <Compile Include="Infrastructure\Concrete\IdentityUserLayer.cs" />
-    <Compile Include="Infrastructure\CustomHelpers.cs" />
-    <Compile Include="Infrastructure\ExceptionLoggingAttribute.cs" />
-    <Compile Include="Infrastructure\FilterAttribute.cs" />
-    <Compile Include="Migrations\201704251000207_InitialCreate.cs" />
-    <Compile Include="Migrations\201704251000207_InitialCreate.Designer.cs">
-      <DependentUpon>201704251000207_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705061450200_first.cs" />
-    <Compile Include="Migrations\201705061450200_first.Designer.cs">
-      <DependentUpon>201705061450200_first.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705101111107_first1.cs" />
-    <Compile Include="Migrations\201705101111107_first1.Designer.cs">
-      <DependentUpon>201705101111107_first1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705101113106_second.cs" />
-    <Compile Include="Migrations\201705101113106_second.Designer.cs">
-      <DependentUpon>201705101113106_second.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Infrastructure\Helpers\CustomHelpers.cs" />
+    <Compile Include="Infrastructure\Attributes\ExceptionLoggingAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\FilterAttribute.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ActionDetail.cs" />
     <Compile Include="Models\ExceptionDetail.cs" />
@@ -312,20 +295,6 @@
       <Project>{4a67340a-78ed-444c-9d8b-a07e73ded090}</Project>
       <Name>PrintStore.Domain</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704251000207_InitialCreate.resx">
-      <DependentUpon>201704251000207_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705061450200_first.resx">
-      <DependentUpon>201705061450200_first.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705101111107_first1.resx">
-      <DependentUpon>201705101111107_first1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705101113106_second.resx">
-      <DependentUpon>201705101113106_second.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

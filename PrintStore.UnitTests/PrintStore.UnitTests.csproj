@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -92,6 +91,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PrintStore.Domain\PrintStore.Domain.csproj">
+      <Project>{4a67340a-78ed-444c-9d8b-a07e73ded090}</Project>
+      <Name>PrintStore.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PrintStore\PrintStore.WebUI.csproj">
       <Project>{CD8D2290-80C6-49F6-9A4D-49C6133AEAA5}</Project>
       <Name>PrintStore.WebUI</Name>
