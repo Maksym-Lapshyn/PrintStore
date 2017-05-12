@@ -1,20 +1,9 @@
-﻿@using PrintStore.Domain.Entities
-@using PrintStore.Domain.Infrastructure.Concrete
-@using PrintStore.Infrastructure.Concrete
-@using Microsoft.AspNet.Identity
-@model Cart
+﻿@using PrintStore.Models
+@model CartViewModel
 
 @{
     ViewBag.Title = "DisplayCart";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
-    IdentityUserLayer userLayer = new IdentityUserLayer();
-    bool userIsBlocked = false;
-    if (Request.IsAuthenticated)
-    {
-        string userId = HttpContext.Current.User.Identity.GetUserId<string>();
-        userIsBlocked = userLayer.Users.Where(u => u.Id == userId).First().IsBlocked;
-    }
 }
 
 <div class="panel panel-default">
@@ -22,7 +11,7 @@
         <h3>Your shopping cart</h3>
     </div>
     <div class="panel-body">
-        @if (Model.CartLines.Count() != 0)
+        @if (Model.CartLineViewModels.Count() != 0)
         {
             <table class="table table-condensed table-striped table-responsive">
                 <tr>
@@ -33,22 +22,21 @@
                     <th style="width:15%;">Actions</th>
                     <th style="width:15%;">Price</th>
                 </tr>
-                @foreach (CartLine cartLine in Model.CartLines)
+                @foreach (CartLineViewModel cartLineViewModel in Model.CartLineViewModels)
                 {
-                    Product product = layer.Products.Where(p => p.ProductId == cartLine.ProductId).First();
                     <tr>
-                        <td>@product.Name</td>
-                        <td>@cartLine.Quantity</td>
-                        <td>@product.Description</td>
-                        <td><img src="~/Images/@product.SmallImagePath" width="200" height="150" /></td>
+                        <td>@cartLineViewModel.Product.Name</td>
+                        <td>@cartLineViewModel.Quantity</td>
+                        <td>@cartLineViewModel.Product.Description</td>
+                        <td><img src="~/Images/@cartLineViewModel.Product.SmallImagePath" width="200" height="150" /></td>
                         <td>
                             @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
                             {
-                                <input type="hidden" name="productId" value=@cartLine.ProductId />
+                                <input type="hidden" name="productId" value=@cartLineViewModel.ProductId />
                                 <input type="submit" value="Remove" class="btn btn-danger" />
                             }
                         </td>
-                        <td>@(cartLine.ComputeTotalPrice())</td>
+                        <td>@(cartLineViewModel.TotalPrice)</td>
                     </tr>
                 }
 
@@ -60,18 +48,18 @@
         }
     </div>
     <div class="panel-footer">
-        @if (Request.IsAuthenticated && userIsBlocked == false && Model.ComputeTotalPrice() != default(decimal))
+        @if (Request.IsAuthenticated && !Model.UserIsBlocked && Model.TotalPrice != default(decimal))
         {
             using (Html.BeginForm("CheckOut", "Cart", FormMethod.Post))
             {
-                <span>Total price - $@Model.ComputeTotalPrice() &nbsp;</span>
+                <span>Total price - $@Model.TotalPrice &nbsp;</span>
                 <input type="submit" class="btn btn-primary btn-lg" value="Check out" />
             }
         }
         else
         {
             <p>
-                Total price - $@Model.ComputeTotalPrice() &nbsp;
+                Total price - $@Model.TotalPrice &nbsp;
                 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Check out</button>
             </p>
             <div class="modal fade" id="myModal" role="dialog">
@@ -81,11 +69,11 @@
                         <h4 class="modal-title">Error</h4>
                     </div>
                     <div class="modal-body">
-                        @if (Model.ComputeTotalPrice() == default(decimal))
+                        @if (Model.TotalPrice == default(decimal))
                         {
                             <p>Your cart is empty!</p>
                         }
-                        else if (userIsBlocked == true)
+                        else if (Model.UserIsBlocked)
                         {
                             <p>Your account is blocked!</p>
                         }

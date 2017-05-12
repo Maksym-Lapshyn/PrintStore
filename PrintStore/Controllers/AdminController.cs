@@ -14,7 +14,6 @@ namespace PrintStore.Controllers
     public class AdminController : Controller
     {
         EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
-
         IdentityUserLayer userLayer = new IdentityUserLayer();
 
         public ActionResult Index()
@@ -24,8 +23,8 @@ namespace PrintStore.Controllers
 
         public ActionResult GetUsers()
         {
-            IEnumerable<ApplicationUser> users = userLayer.Users;
-            return View(users.ToList());
+            List<UserViewModel> userViewModels = userLayer.Users.Select(u => new UserViewModel() { UserId = u.Id, Email = u.Id, Role = userLayer.GetRoleName(u.Id), IsBlocked = u.IsBlocked }).ToList();
+            return View(userViewModels);
         }
 
         [HttpPost]

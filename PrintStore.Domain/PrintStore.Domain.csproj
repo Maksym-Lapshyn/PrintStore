@@ -54,16 +54,32 @@
     <Compile Include="Infrastructure\Abstract\IBusinessLogicLayer.cs" />
     <Compile Include="Infrastructure\Concrete\EFBusinessLogicLayer.cs" />
     <Compile Include="Infrastructure\Contexts\EFDbContext.cs" />
-    <Compile Include="Entities\Cart.cs" />
     <Compile Include="Entities\CartLine.cs" />
     <Compile Include="Entities\Category.cs" />
     <Compile Include="Entities\Order.cs" />
     <Compile Include="Entities\Product.cs" />
+    <Compile Include="Migrations\201705111512390_InitialCreate.cs" />
+    <Compile Include="Migrations\201705111512390_InitialCreate.Designer.cs">
+      <DependentUpon>201705111512390_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705121114500_first.cs" />
+    <Compile Include="Migrations\201705121114500_first.Designer.cs">
+      <DependentUpon>201705121114500_first.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201705111512390_InitialCreate.resx">
+      <DependentUpon>201705111512390_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705121114500_first.resx">
+      <DependentUpon>201705121114500_first.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

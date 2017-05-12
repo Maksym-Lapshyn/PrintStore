@@ -6,19 +6,23 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <div class="row">
-        @foreach (Category category in Model)
+<div class="row">
+    @foreach (Category category in Model)
+    {
+        if (category.Products.Count == 0)
         {
-            <div class="col-sm-6 col-lg-4">
-                <div class="thumbnail">
-                    <img src="~/Images/@category.Products.FirstOrDefault().SmallImagePath" alt="@category.Name" />
-                    <div class="caption">
-                        <h3>@category.Name</h3>
-                        <p>@category.Description</p>
-                        <p>@Html.ActionLink("Browse products", "GetProducts", "Product", new { categoryId = category.CategoryId }, new { @class = "btn btn-primary btn-lg" })</p>
-                    </div>
+            continue;
+        }
+        <div class="col-sm-6 col-lg-4">
+            <div class="thumbnail">
+                <img src="~/Images/@category.Products.FirstOrDefault().SmallImagePath" alt="@category.Name" />
+                <div class="caption">
+                    <h3>@category.Name</h3>
+                    <p>@category.Description</p>
+                    <p>@Html.ActionLink("Browse products", "GetProducts", "Product", new { categoryId = category.CategoryId }, new { @class = "btn btn-primary btn-lg" })</p>
                 </div>
             </div>
-        }
-    </div>
+        </div>
+    }
+</div>
 

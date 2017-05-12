@@ -8,7 +8,7 @@ using PrintStore.Infrastructure.Attributes;
 namespace PrintStore.Controllers
 {
     [ActionLogging]
-    [ExceptionLogging]
+
     public class HomeController : Controller
     {
         public ActionResult Index()

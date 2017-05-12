@@ -1,11 +1,9 @@
 ﻿@using PrintStore.Models
-@using PrintStore.Infrastructure.Concrete
-@model List<ApplicationUser>
+@model List<UserViewModel>
 
 @{
     ViewBag.Title = "GetUsers";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    IdentityUserLayer layer = new IdentityUserLayer();
 }
 
 <div class="panel panel-default">
@@ -21,28 +19,28 @@
                 <th style="width:20%;">Role</th>
                 <th style="width:20%;">Actions</th>
             </tr>
-            @foreach (ApplicationUser user in Model)
+            @foreach (UserViewModel userViewModel in Model)
             {
-                if (user.Email == "admin@gmail.com")
+                if (userViewModel.Role == UserViewModel.AdminRole)
                 {
                     continue;
                 }
                 <tr>
-                    @using (Html.BeginForm("ModifyUser", "Admin", new { userId = user.Id }, FormMethod.Post, null))
+                    @using (Html.BeginForm("ModifyUser", "Admin", new { userId = userViewModel.UserId }, FormMethod.Post, null))
                     {
 
-                        <td>@user.Id</td>
-                        <td>@user.Email</td>
+                        <td>@userViewModel.UserId</td>
+                        <td>@userViewModel.Email</td>
                         <td>
                             @Html.DropDownList("IsBlocked", new[] {
-                                new SelectListItem { Value = "1", Text = "True", Selected = user.IsBlocked },
-                                new SelectListItem { Value = "0", Text = "False", Selected = !user.IsBlocked }
+                                new SelectListItem { Value = "1", Text = "True", Selected = userViewModel.IsBlocked },
+                                new SelectListItem { Value = "0", Text = "False", Selected = !userViewModel.IsBlocked }
                             }, new { @class = "form-control" })
                         </td>
                         <td>
                             @Html.DropDownList("Role", new[] {
-                                new SelectListItem { Value = "User", Text = "User", Selected = layer.GetRoleName(user.Id) == "User" },
-                                new SelectListItem { Value = "Manager", Text = "Manager", Selected = layer.GetRoleName(user.Id) == "Manager" }
+                                new SelectListItem { Value = "User", Text = "User", Selected = userViewModel.Role == UserViewModel.UserRole },
+                                new SelectListItem { Value = "Manager", Text = "Manager", Selected = userViewModel.Role == UserViewModel.ManagerRole }
                             }, new { @class = "form-control" })
                         </td>
                         <td>

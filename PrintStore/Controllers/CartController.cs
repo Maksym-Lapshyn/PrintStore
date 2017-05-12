@@ -13,64 +13,70 @@ using PrintStore.Infrastructure.Attributes;
 namespace PrintStore.Controllers
 {
     [ActionLogging]
-    [ExceptionLogging]
+
     public class CartController : Controller
     {
         EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
-
         IdentityUserLayer userLayer = new IdentityUserLayer();
 
         public ActionResult DisplayCartSummary()
         {
-            Cart cart = GetCart();
-            return PartialView(cart);
+            CartViewModel cartViewModel = GetCart();
+            return PartialView(cartViewModel);
         }
 
         public ActionResult DisplayCart()
         {
-            Cart cart = GetCart();
-            return View(cart);
+            CartViewModel cartViewModel = GetCart();
+            return View(cartViewModel);
         }
 
         [HttpPost]
         public ActionResult AddToCart(int productId, int quantity)
         {
-            Cart cart = GetCart();
-            cart.AddCartLine(productId, quantity);
-            return View("DisplayCart", cart);
+            CartViewModel cartViewModel = GetCart();
+            cartViewModel.AddCartLineViewModel(productId, quantity);
+            return View("DisplayCart", cartViewModel);
         }
 
         [HttpPost]
         public ActionResult RemoveFromCart(int productId)
         {
-            Cart cart = GetCart();
-            cart.RemoveCartLine(productId);
+            CartViewModel cartViewModel = GetCart();
+            cartViewModel.RemoveCartLineViewModel(productId);
             Product product = layer.Products.Where(p => p.ProductId == productId).First();
             TempData["message"] = string.Format("{0} was successfully removed from your cart", product.Name);
-            return View("DisplayCart", cart);
+            return View("DisplayCart", cartViewModel);
         }
 
         [HttpPost]
         public ActionResult CheckOut()
         {
-            Cart cart = GetCart();
+            CartViewModel cartViewModel = GetCart();
             Session.Clear();
             string userId = User.Identity.GetUserId<string>();
-            layer.SaveOrder(cart, userId);
+            List<CartLine> cartLines = cartViewModel.CartLineViewModels.Select(c => new CartLine() { ProductId = c.ProductId, Quantity = c.Quantity, TotalPrice = c.TotalPrice }).ToList();
+            layer.SaveOrder(cartLines, userId);
             TempData["message"] = string.Format("Your order was successfully registered");
             return View("DisplayCart", GetCart());
         }
 
-        private Cart GetCart()
+        private CartViewModel GetCart()
         {
-            Cart cart = (Cart)Session["cart"];
-            if (cart == null)
+            CartViewModel cartViewModel = (CartViewModel)Session["cartViewModel"];
+            if (cartViewModel == null)
             {
-                cart = new Cart();
-                Session["cart"] = cart;
+                cartViewModel = new CartViewModel();
+                cartViewModel.UserId = User.Identity.GetUserId<string>();
+                if (Request.IsAuthenticated)
+                {
+                    cartViewModel.UserIsBlocked = userLayer.Users.Where(u => u.Id == cartViewModel.UserId).First().IsBlocked;
+                }
+
+                Session["cartViewModel"] = cartViewModel;
             }
 
-            return cart;
+            return cartViewModel;
         }
     }
 }

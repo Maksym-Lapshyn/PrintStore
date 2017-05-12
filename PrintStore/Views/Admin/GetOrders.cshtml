@@ -5,7 +5,6 @@
 @{
     ViewBag.Title = "GetOrders";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
 }
 
 <div class="panel panel-default">
@@ -49,8 +48,7 @@
                         <td>
                             @foreach (CartLine cartLine in order.CartLines)
                             {
-                                Product product = layer.Products.Where(p => p.ProductId == cartLine.ProductId).First();
-                                <p>@string.Format("{0}({1}) x {2}", product.Name, product.Price, cartLine.Quantity)</p>
+                                <p>@string.Format("{0} x {1}", cartLine.ProductId, cartLine.Quantity)</p>
                             }
                         </td>
                         <td>$@order.TotalPrice</td>

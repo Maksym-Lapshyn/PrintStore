@@ -1,6 +1,6 @@
-﻿@using PrintStore.Domain.Entities
-@model Cart
+﻿@using PrintStore.Models
+@model CartViewModel
 
 <ul class="nav navbar-nav navbar-right">
-    <li><a href=@Url.Action("DisplayCart", "Cart")><span class="glyphicon glyphicon-shopping-cart"></span> Total price: $@Model.ComputeTotalPrice()</a></li>
+    <li><a href=@Url.Action("DisplayCart", "Cart")><span class="glyphicon glyphicon-shopping-cart"></span> Total price: $@Model.TotalPrice</a></li>
 </ul>

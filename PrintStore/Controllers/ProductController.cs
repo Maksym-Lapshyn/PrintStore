@@ -11,7 +11,7 @@ using PrintStore.Infrastructure.Attributes;
 namespace PrintStore.Controllers
 {
     [ActionLogging]
-    [ExceptionLogging]
+
     public class ProductController : Controller
     {
         EFBusinessLogicLayer layer = new EFBusinessLogicLayer();

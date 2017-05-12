@@ -12,12 +12,6 @@ namespace PrintStore.Domain.Entities
         public int CartLineId { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-
-        public decimal ComputeTotalPrice()
-        {
-            EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
-            decimal totalPrice = layer.Products.Where(p => p.ProductId == ProductId).First().Price * Quantity;
-            return totalPrice;
-        }
+        public decimal TotalPrice { get; set; }
     }
 }

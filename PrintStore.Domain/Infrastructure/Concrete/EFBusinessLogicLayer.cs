@@ -192,13 +192,13 @@ namespace PrintStore.Domain.Infrastructure.Concrete
             return priceLimit;
         }
 
-        public void SaveOrder(Cart cart, string userId)
+        public void SaveOrder(List<CartLine> cartLines, string userId)
         {
             Order order = new Order();
             order.DateAdded = DateTime.UtcNow;
             order.UserId = userId;
-            order.CartLines = cart.CartLines;
-            order.TotalPrice = cart.ComputeTotalPrice();
+            order.CartLines = cartLines;
+            order.TotalPrice = order.CartLines.Sum(c => context.Products.Where(p => p.ProductId == c.ProductId).First().Price * c.Quantity);
             context.Orders.Add(order);
             context.SaveChanges();
         }
