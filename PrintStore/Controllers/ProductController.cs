@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using PrintStore.Domain.Infrastructure.Concrete;
+using PrintStore.Domain.Infrastructure.Abstract;
 using PrintStore.Domain.Entities;
 using PrintStore.Models;
 using PrintStore.Infrastructure.Attributes;
@@ -14,17 +14,22 @@ namespace PrintStore.Controllers
 
     public class ProductController : Controller
     {
-        EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
+        IBusinessLogicLayer businessLayer;
+
+        public ProductController(IBusinessLogicLayer businessLayerParam)
+        {
+            businessLayer = businessLayerParam;
+        }
 
         public ActionResult GetCategories()
         {
-            IEnumerable<Category> categories = layer.Categories.Where(c => c.IsDeleted == false);
+            IEnumerable<Category> categories = businessLayer.Categories.Where(c => c.IsDeleted == false);
             return View(categories.ToList());
         }
 
         public ActionResult GetProducts(int categoryId)
         {
-            IEnumerable<Product> products = layer.Products.Where(p => p.CategoryId == categoryId && p.IsDeleted == false);
+            IEnumerable<Product> products = businessLayer.Products.Where(p => p.CategoryId == categoryId && p.IsDeleted == false);
             ProductsViewModel model = new ProductsViewModel();
             model.Products = products;
             model.Filter = new FilterViewModel();
@@ -35,7 +40,7 @@ namespace PrintStore.Controllers
         [HttpPost]
         public ActionResult GetProducts(ProductsViewModel model)
         {
-            model.Products = layer.Products.Where(p => p.CategoryId == model.Filter.CategoryId && p.IsDeleted == false);
+            model.Products = businessLayer.Products.Where(p => p.CategoryId == model.Filter.CategoryId && p.IsDeleted == false);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -47,7 +52,7 @@ namespace PrintStore.Controllers
 
         public ActionResult GetProductDetails(int productId)
         {
-            Product product = layer.Products.Where(p => p.ProductId == productId).First();
+            Product product = businessLayer.Products.Where(p => p.ProductId == productId).First();
             return View(product);
         }
 

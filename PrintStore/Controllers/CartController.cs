@@ -4,10 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PrintStore.Domain.Entities;
-using PrintStore.Domain.Infrastructure.Concrete;
+using PrintStore.Domain.Infrastructure.Abstract;
 using PrintStore.Models;
 using Microsoft.AspNet.Identity;
-using PrintStore.Infrastructure.Concrete;
+using PrintStore.Infrastructure.Abstract;
 using PrintStore.Infrastructure.Attributes;
 
 namespace PrintStore.Controllers
@@ -16,8 +16,14 @@ namespace PrintStore.Controllers
 
     public class CartController : Controller
     {
-        EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
-        IdentityUserLayer userLayer = new IdentityUserLayer();
+        IBusinessLogicLayer businessLayer;
+        IUserLayer userLayer;
+
+        public CartController(IBusinessLogicLayer businessLayerParam, IUserLayer userLayerParam)
+        {
+            businessLayer = businessLayerParam;
+            userLayer = userLayerParam;
+        }
 
         public ActionResult DisplayCartSummary()
         {
@@ -44,7 +50,7 @@ namespace PrintStore.Controllers
         {
             CartViewModel cartViewModel = GetCart();
             cartViewModel.RemoveCartLineViewModel(productId);
-            Product product = layer.Products.Where(p => p.ProductId == productId).First();
+            Product product = businessLayer.Products.Where(p => p.ProductId == productId).First();
             TempData["message"] = string.Format("{0} was successfully removed from your cart", product.Name);
             return View("DisplayCart", cartViewModel);
         }
@@ -56,7 +62,7 @@ namespace PrintStore.Controllers
             Session.Clear();
             string userId = User.Identity.GetUserId<string>();
             List<CartLine> cartLines = cartViewModel.CartLineViewModels.Select(c => new CartLine() { ProductId = c.ProductId, Quantity = c.Quantity, TotalPrice = c.TotalPrice }).ToList();
-            layer.SaveOrder(cartLines, userId);
+            businessLayer.SaveOrder(cartLines, userId);
             TempData["message"] = string.Format("Your order was successfully registered");
             return View("DisplayCart", GetCart());
         }

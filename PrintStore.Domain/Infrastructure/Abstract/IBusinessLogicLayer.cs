@@ -12,6 +12,12 @@ namespace PrintStore.Domain.Infrastructure.Abstract
     /// </summary>
     public interface IBusinessLogicLayer
     {
+        IEnumerable<Product> Products { get; }
+
+        IEnumerable<Category> Categories { get; }
+
+        IEnumerable<Order> Orders { get; }
+
         void SaveProduct(Product product);
 
         Product DeleteProduct(int productId);
@@ -19,5 +25,15 @@ namespace PrintStore.Domain.Infrastructure.Abstract
         void SaveCategory(Category category);
 
         Category DeleteCategory(int categoryId);
+
+        decimal GetPriceLimit(bool minimum);
+
+        void SaveOrder(List<CartLine> cartLines, string userId);
+
+        Order DeleteOrder(int orderId);
+
+        Order RestoreOrder(int orderId);
+
+        void ChangeOrderStatus(int orderId, string orderStatus);
     }
 }

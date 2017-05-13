@@ -4,26 +4,41 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PrintStore.Domain.Infrastructure.Concrete;
+using PrintStore.Domain.Infrastructure.Abstract;
 using PrintStore.Domain.Entities;
 using PrintStore.Models;
-using PrintStore.Infrastructure.Concrete;
+using PrintStore.Infrastructure.Abstract;
 
 namespace PrintStore.Controllers
 {
     [Authorize(Roles = "Admin, Manager")]
     public class AdminController : Controller
     {
-        EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
-        IdentityUserLayer userLayer = new IdentityUserLayer();
+        IBusinessLogicLayer businessLayer;
+        IUserLayer userLayer;
+
+        public AdminController(IBusinessLogicLayer businessLayerParam, IUserLayer userLayerParam)
+        {
+            businessLayer = businessLayerParam;
+            userLayer = userLayerParam;
+        }
 
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult GetUsers()
+        public ViewResult GetUsers(IUserLayer iUserLayerParam = null)
         {
-            List<UserViewModel> userViewModels = userLayer.Users.Select(u => new UserViewModel() { UserId = u.Id, Email = u.Id, Role = userLayer.GetRoleName(u.Id), IsBlocked = u.IsBlocked }).ToList();
+            List<UserViewModel> userViewModels = new List<UserViewModel>();
+            if (iUserLayerParam != null)
+            {
+                userViewModels = userLayer.Users.Select(u => new UserViewModel() { UserId = u.Id, Email = u.Id, Role = userLayer.GetRoleName(u.Id), IsBlocked = u.IsBlocked }).ToList();
+            }
+            else
+            {
+                userViewModels = iUserLayerParam.Users.Select(u => new UserViewModel() { UserId = u.Id, Email = u.Id, Role = userLayer.GetRoleName(u.Id), IsBlocked = u.IsBlocked }).ToList();
+            }
             return View(userViewModels);
         }
 
@@ -44,9 +59,9 @@ namespace PrintStore.Controllers
             return RedirectToAction("GetUsers");
         }
 
-        public ActionResult GetOrders()
+        public ViewResult GetOrders()
         {
-            IEnumerable<Order> orders = layer.Orders;
+            IEnumerable<Order> orders = businessLayer.Orders;
             return View(orders.ToList());
         }
 
@@ -55,27 +70,27 @@ namespace PrintStore.Controllers
         {
             if (isDeleted == 1)
             {
-                layer.DeleteOrder(orderId);
+                businessLayer.DeleteOrder(orderId);
             }
             else
             {
-                layer.RestoreOrder(orderId);
+                businessLayer.RestoreOrder(orderId);
             }
 
-            layer.ChangeOrderStatus(orderId, orderStatus);
+            businessLayer.ChangeOrderStatus(orderId, orderStatus);
             TempData["message"] = string.Format("Order was successfully updated");
             return RedirectToAction("GetOrders");
         }
 
-        public ActionResult GetCategories()
+        public ViewResult GetCategories()
         {
-            IEnumerable<Category> categories = layer.Categories.Where(c => c.IsDeleted == false);
+            IEnumerable<Category> categories = businessLayer.Categories.Where(c => c.IsDeleted == false);
             return View(categories);
         }
 
-        public ActionResult EditCategory(int categoryId)
+        public ViewResult EditCategory(int categoryId)
         {
-            Category category = layer.Categories.Where(c => c.CategoryId == categoryId).First();
+            Category category = businessLayer.Categories.Where(c => c.CategoryId == categoryId).First();
             return View(category);
         }
 
@@ -87,12 +102,12 @@ namespace PrintStore.Controllers
                 return View(category);
             }
 
-            layer.SaveCategory(category);
+            businessLayer.SaveCategory(category);
             TempData["message"] = string.Format("{0} was successfully updated", category.Name);
             return RedirectToAction("GetCategories");
         }
 
-        public ActionResult AddCategory()
+        public ViewResult AddCategory()
         {
             return View("EditCategory", new Category());
         }
@@ -100,7 +115,7 @@ namespace PrintStore.Controllers
         [HttpPost]
         public ActionResult DeleteCategory(int categoryId)
         {
-            Category category = layer.DeleteCategory(categoryId);
+            Category category = businessLayer.DeleteCategory(categoryId);
             if (category != null)
             {
                 TempData["message"] = string.Format("{0} was successfully deleted", category.Name);
@@ -109,9 +124,9 @@ namespace PrintStore.Controllers
             return RedirectToAction("GetCategories");
         }
 
-        public ActionResult EditProduct(int productId)
+        public ViewResult EditProduct(int productId)
         {
-            Product product = layer.Products.Where(p => p.ProductId == productId).First();
+            Product product = businessLayer.Products.Where(p => p.ProductId == productId).First();
             return View(product);
         }
 
@@ -129,12 +144,12 @@ namespace PrintStore.Controllers
                 product.ImageGuid = Guid.NewGuid();
             }
 
-            layer.SaveProduct(product);
+            businessLayer.SaveProduct(product);
             TempData["message"] = string.Format("{0} was successfully updated", product.Name);
             return RedirectToAction("GetCategories");
         }
 
-        public ActionResult AddProduct(int categoryId)
+        public ViewResult AddProduct(int categoryId)
         {
             Product product = new Product();
             product.CategoryId = categoryId;
@@ -144,7 +159,7 @@ namespace PrintStore.Controllers
         [HttpPost]
         public ActionResult DeleteProduct(int productId)
         {
-            Product product = layer.DeleteProduct(productId);
+            Product product = businessLayer.DeleteProduct(productId);
             if (product != null)
             {
                 TempData["message"] = string.Format("{0} was successfully deleted", product.Name);
