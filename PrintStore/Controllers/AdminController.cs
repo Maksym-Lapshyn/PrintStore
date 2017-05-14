@@ -104,7 +104,7 @@ namespace PrintStore.Controllers
 
             businessLayer.SaveCategory(category);
             TempData["message"] = string.Format("{0} was successfully updated", category.Name);
-            return RedirectToAction("GetCategories");
+            return RedirectToAction("GetCategories", "Admin");
         }
 
         public ViewResult AddCategory()
@@ -121,7 +121,7 @@ namespace PrintStore.Controllers
                 TempData["message"] = string.Format("{0} was successfully deleted", category.Name);
             }
 
-            return RedirectToAction("GetCategories");
+            return RedirectToAction("GetCategories", "Admin");
         }
 
         public ViewResult EditProduct(int productId)
@@ -146,7 +146,7 @@ namespace PrintStore.Controllers
 
             businessLayer.SaveProduct(product);
             TempData["message"] = string.Format("{0} was successfully updated", product.Name);
-            return RedirectToAction("GetCategories");
+            return RedirectToAction("GetCategories", "Admin");
         }
 
         public ViewResult AddProduct(int categoryId)
@@ -165,7 +165,7 @@ namespace PrintStore.Controllers
                 TempData["message"] = string.Format("{0} was successfully deleted", product.Name);
             }
 
-            return RedirectToAction("GetCategories");
+            return RedirectToAction("GetCategories", "Admin");
         }
     }
 }

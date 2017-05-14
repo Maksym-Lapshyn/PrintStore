@@ -10,6 +10,7 @@ using PrintStore.Controllers;
 using PrintStore.Infrastructure.Abstract;
 using System.Linq;
 using PrintStore.Models;
+using System.Web;
 
 namespace PrintStore.UnitTests
 {
@@ -177,6 +178,72 @@ namespace PrintStore.UnitTests
             Assert.IsTrue(result.ProductId == 0);
             Assert.IsTrue(result.CategoryId == 1);
             Assert.IsTrue(result.Name == null);
+        }
+
+        [TestMethod]
+        public void EditCategory_Redirects_Correctly()
+        {
+            //arrange
+            Mock<IBusinessLogicLayer> mockOfBusinessLogicLayer = new Mock<IBusinessLogicLayer>();
+            Mock<IUserLayer> mockOfUserLayer = new Mock<IUserLayer>();
+            AdminController target = new AdminController(mockOfBusinessLogicLayer.Object, mockOfUserLayer.Object);
+            Category category = new Category() { CategoryId = 1, Name = "first" };
+            //act
+            RedirectToRouteResult result = (RedirectToRouteResult)target.EditCategory(category);
+            //assert
+            Assert.AreEqual("Admin", result.RouteValues["controller"]);
+            Assert.AreEqual("GetCategories", result.RouteValues["action"]);
+        }
+
+        [TestMethod]
+        public void DeleteCategory_Redirects_Correctly()
+        {
+            //arrange
+            Mock<IBusinessLogicLayer> mockOfBusinessLogicLayer = new Mock<IBusinessLogicLayer>();
+            Mock<IUserLayer> mockOfUserLayer = new Mock<IUserLayer>();
+            mockOfBusinessLogicLayer.Setup(m => m.Categories).Returns(new List<Category>
+            {
+                new Category {CategoryId = 1, Name = "first" }
+            });
+            AdminController target = new AdminController(mockOfBusinessLogicLayer.Object, mockOfUserLayer.Object);
+            //act
+            RedirectToRouteResult result = (RedirectToRouteResult)target.DeleteCategory(1);
+            //assert
+            Assert.AreEqual("Admin", result.RouteValues["controller"]);
+            Assert.AreEqual("GetCategories", result.RouteValues["action"]);
+        }
+
+        [TestMethod]
+        public void EditProduct_Redirects_Correctly()
+        {
+            //arrange
+            Mock<IBusinessLogicLayer> mockOfBusinessLogicLayer = new Mock<IBusinessLogicLayer>();
+            Mock<IUserLayer> mockOfUserLayer = new Mock<IUserLayer>();
+            AdminController target = new AdminController(mockOfBusinessLogicLayer.Object, mockOfUserLayer.Object);
+            Product product = new Product() { ProductId = 1, Name = "first" };
+            //act
+            RedirectToRouteResult result = (RedirectToRouteResult)target.EditProduct(product, null);
+            //assert
+            Assert.AreEqual("Admin", result.RouteValues["controller"]);
+            Assert.AreEqual("GetCategories", result.RouteValues["action"]);
+        }
+
+        [TestMethod]
+        public void DeleteProduct_Redirects_Correctly()
+        {
+            //arrange
+            Mock<IBusinessLogicLayer> mockOfBusinessLogicLayer = new Mock<IBusinessLogicLayer>();
+            Mock<IUserLayer> mockOfUserLayer = new Mock<IUserLayer>();
+            mockOfBusinessLogicLayer.Setup(m => m.Products).Returns(new List<Product>
+            {
+                new Product {ProductId = 1, Name = "first" }
+            });
+            AdminController target = new AdminController(mockOfBusinessLogicLayer.Object, mockOfUserLayer.Object);
+            //act
+            RedirectToRouteResult result = (RedirectToRouteResult)target.DeleteProduct(1);
+            //assert
+            Assert.AreEqual("Admin", result.RouteValues["controller"]);
+            Assert.AreEqual("GetCategories", result.RouteValues["action"]);
         }
     }
 }

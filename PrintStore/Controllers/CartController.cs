@@ -25,20 +25,20 @@ namespace PrintStore.Controllers
             userLayer = userLayerParam;
         }
 
-        public ActionResult DisplayCartSummary()
+        public PartialViewResult DisplayCartSummary()
         {
             CartViewModel cartViewModel = GetCart();
             return PartialView(cartViewModel);
         }
 
-        public ActionResult DisplayCart()
+        public ViewResult DisplayCart()
         {
             CartViewModel cartViewModel = GetCart();
             return View(cartViewModel);
         }
 
         [HttpPost]
-        public ActionResult AddToCart(int productId, int quantity)
+        public ViewResult AddToCart(int productId, int quantity)
         {
             CartViewModel cartViewModel = GetCart();
             cartViewModel.AddCartLineViewModel(productId, quantity);
@@ -46,7 +46,7 @@ namespace PrintStore.Controllers
         }
 
         [HttpPost]
-        public ActionResult RemoveFromCart(int productId)
+        public ViewResult RemoveFromCart(int productId)
         {
             CartViewModel cartViewModel = GetCart();
             cartViewModel.RemoveCartLineViewModel(productId);
@@ -56,7 +56,7 @@ namespace PrintStore.Controllers
         }
 
         [HttpPost]
-        public ActionResult CheckOut()
+        public ViewResult CheckOut()
         {
             CartViewModel cartViewModel = GetCart();
             Session.Clear();
@@ -72,10 +72,10 @@ namespace PrintStore.Controllers
             CartViewModel cartViewModel = (CartViewModel)Session["cartViewModel"];
             if (cartViewModel == null)
             {
-                cartViewModel = new CartViewModel();
-                cartViewModel.UserId = User.Identity.GetUserId<string>();
+                cartViewModel = new CartViewModel(businessLayer);
                 if (Request.IsAuthenticated)
                 {
+                    cartViewModel.UserId = User.Identity.GetUserId<string>();
                     cartViewModel.UserIsBlocked = userLayer.Users.Where(u => u.Id == cartViewModel.UserId).First().IsBlocked;
                 }
 
