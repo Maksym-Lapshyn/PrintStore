@@ -15,7 +15,7 @@ using System.Web;
 namespace PrintStore.UnitTests
 {
     /// <summary>
-    /// Summary description for CartTests
+    /// Tests actions of Cart controller
     /// </summary>
     [TestClass]
     public class CartTests

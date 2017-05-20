@@ -12,6 +12,9 @@ using PrintStore.Infrastructure.Concrete;
 
 namespace PrintStore.Infrastructure.Util
 {
+    /// <summary>
+    /// Class for resolving dependencies
+    /// </summary>
     public class NinjectDependencyResolver : IDependencyResolver
     {
         private IKernel kernel;
@@ -32,6 +35,9 @@ namespace PrintStore.Infrastructure.Util
             return kernel.GetAll(serviceType);
         }
 
+        /// <summary>
+        /// Registers dependencies and resolves them
+        /// </summary>
         private void AddBindings()
         {
             kernel.Bind<ILoggingLayer>().To<EFLoggingLayer>();

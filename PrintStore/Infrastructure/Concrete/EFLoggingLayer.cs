@@ -8,6 +8,9 @@ using PrintStore.Models;
 
 namespace PrintStore.Infrastructure.Concrete
 {
+    /// <summary>
+    /// Logging functionality embodied with the help of Entity Framework
+    /// </summary>
     public class EFLoggingLayer : ILoggingLayer
     {
         EFLoggingContext context = new EFLoggingContext();

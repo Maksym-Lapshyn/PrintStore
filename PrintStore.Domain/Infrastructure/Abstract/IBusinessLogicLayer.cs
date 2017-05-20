@@ -8,7 +8,7 @@ using PrintStore.Domain.Entities;
 namespace PrintStore.Domain.Infrastructure.Abstract
 {
     /// <summary>
-    /// Basic functionality of a business logic layer
+    /// Basic functionality that should be persistent throughout a web-store
     /// </summary>
     public interface IBusinessLogicLayer
     {

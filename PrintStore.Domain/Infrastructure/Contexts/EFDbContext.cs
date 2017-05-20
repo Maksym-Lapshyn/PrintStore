@@ -8,6 +8,9 @@ using PrintStore.Domain.Entities;
 
 namespace PrintStore.Domain.Infrastructure.Contexts
 {
+    /// <summary>
+    /// Database context for Entity Framework
+    /// </summary>
     public class EFDbContext : DbContext
     {
         public virtual DbSet<Product> Products { get; set; }

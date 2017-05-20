@@ -12,10 +12,14 @@ using PrintStore.Infrastructure.Attributes;
 
 namespace PrintStore.Controllers
 {
+    /// <summary>
+    /// Controller for cart's functionality
+    /// </summary>
     [ActionLogging]
-
+    [ExceptionLogging]
     public class CartController : Controller
     {
+        //Contstuctor that takes arguments from Ninject
         IBusinessLogicLayer businessLayer;
         IUserLayer userLayer;
 
@@ -25,12 +29,20 @@ namespace PrintStore.Controllers
             userLayer = userLayerParam;
         }
 
+        /// <summary>
+        /// Partial view that displays summary of user's cart in layout
+        /// </summary>
+        /// <returns>View model of cart</returns>
         public PartialViewResult DisplayCartSummary()
         {
             CartViewModel cartViewModel = GetCart();
             return PartialView(cartViewModel);
         }
 
+        /// <summary>
+        /// Displays total information of cart
+        /// </summary>
+        /// <returns>View model of cart</returns>
         public ViewResult DisplayCart()
         {
             CartViewModel cartViewModel = GetCart();
@@ -55,6 +67,10 @@ namespace PrintStore.Controllers
             return View("DisplayCart", cartViewModel);
         }
 
+        /// <summary>
+        /// Clears session, and converts cartlines of cart and id of user into order
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ViewResult CheckOut()
         {
@@ -67,6 +83,10 @@ namespace PrintStore.Controllers
             return View("DisplayCart", GetCart());
         }
 
+        /// <summary>
+        /// Gets cart from session if it already stores a cart or creates a new cart and adds it to session
+        /// </summary>
+        /// <returns>View model for cart</returns>
         private CartViewModel GetCart()
         {
             CartViewModel cartViewModel = (CartViewModel)Session["cartViewModel"];

@@ -15,7 +15,7 @@ using System.Web;
 namespace PrintStore.UnitTests
 {
     /// <summary>
-    /// Summary description for AdminTests
+    /// Tests actions of Admin Controller
     /// </summary>
     [TestClass]
     public class AdminTests
@@ -119,16 +119,17 @@ namespace PrintStore.UnitTests
             Mock<IUserLayer> mockOfUserLayer = new Mock<IUserLayer>();
             mockOfUserLayer.Setup(m => m.Users).Returns(new List<ApplicationUser>
             {
-                new ApplicationUser {IsBlocked = false },
+                new ApplicationUser {IsBlocked = true },
                 new ApplicationUser {IsBlocked = false },
                 new ApplicationUser {IsBlocked = false }
             });
             AdminController target = new AdminController(mockOfBusinessLogicLayer.Object, mockOfUserLayer.Object);
             //act
-            List<UserViewModel> result = ((IEnumerable<UserViewModel>)target.GetUsers(mockOfUserLayer.Object).ViewData.Model).ToList();
+            List<UserViewModel> result = ((IEnumerable<UserViewModel>)target.GetUsers().ViewData.Model).ToList();
             //assert
             Assert.IsTrue(result.Count == 3);
-            Assert.AreEqual(false, result[0].IsBlocked);
+            Assert.AreEqual(true, result[0].IsBlocked);
+            Assert.AreEqual(false, result[1].IsBlocked);
         }
 
         [TestMethod]

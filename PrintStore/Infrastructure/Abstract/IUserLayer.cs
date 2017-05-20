@@ -7,6 +7,9 @@ using PrintStore.Models;
 
 namespace PrintStore.Infrastructure.Abstract
 {
+    /// <summary>
+    /// Basic interface for managing users and their roles
+    /// </summary>
     public interface IUserLayer
     {
         IEnumerable<ApplicationUser> Users { get; }

@@ -7,6 +7,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PrintStore.Infrastructure.Attributes
 {
+    /// <summary>
+    /// Attribute for validation of filter
+    /// </summary>
     public class FilterAttribute : ValidationAttribute
     {
         public override bool IsValid(object value)

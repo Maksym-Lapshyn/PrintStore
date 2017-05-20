@@ -6,6 +6,9 @@ using PrintStore.Domain.Entities;
 
 namespace PrintStore.Models
 {
+    /// <summary>
+    /// View model of cartline
+    /// </summary>
     public class CartLineViewModel
     {
         public int CartLineId { get; set; }

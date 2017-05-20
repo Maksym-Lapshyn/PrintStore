@@ -5,6 +5,9 @@ using System.Web;
 
 namespace PrintStore.Models
 {
+    /// <summary>
+    /// Information for logging exceptions
+    /// </summary>
     public class ExceptionDetail
     {
         public int Id { get; set; }

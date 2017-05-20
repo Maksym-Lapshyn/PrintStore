@@ -6,6 +6,9 @@ using PrintStore.Domain.Entities;
 
 namespace PrintStore.Models
 {
+    /// <summary>
+    /// View model for filtered products
+    /// </summary>
     public class ProductsViewModel
     {
         public FilterViewModel Filter { get; set; }

@@ -8,15 +8,21 @@ using PrintStore.Domain.Infrastructure.Abstract;
 using PrintStore.Domain.Entities;
 using PrintStore.Models;
 using PrintStore.Infrastructure.Abstract;
+using PrintStore.Infrastructure.Attributes;
 
 namespace PrintStore.Controllers
 {
+    /// <summary>
+    /// Controller accessible only by managers and administrators used to administrate the website
+    /// </summary>
     [Authorize(Roles = "Admin, Manager")]
+    [ExceptionLogging]
     public class AdminController : Controller
     {
         IBusinessLogicLayer businessLayer;
         IUserLayer userLayer;
 
+        //Contstuctor that takes arguments from Ninject
         public AdminController(IBusinessLogicLayer businessLayerParam, IUserLayer userLayerParam)
         {
             businessLayer = businessLayerParam;
@@ -28,17 +34,10 @@ namespace PrintStore.Controllers
             return View();
         }
 
-        public ViewResult GetUsers(IUserLayer iUserLayerParam = null)
+        public ViewResult GetUsers()
         {
             List<UserViewModel> userViewModels = new List<UserViewModel>();
-            if (iUserLayerParam != null)
-            {
-                userViewModels = userLayer.Users.Select(u => new UserViewModel() { UserId = u.Id, Email = u.Id, Role = userLayer.GetRoleName(u.Id), IsBlocked = u.IsBlocked }).ToList();
-            }
-            else
-            {
-                userViewModels = iUserLayerParam.Users.Select(u => new UserViewModel() { UserId = u.Id, Email = u.Id, Role = userLayer.GetRoleName(u.Id), IsBlocked = u.IsBlocked }).ToList();
-            }
+            userViewModels = userLayer.Users.Select(u => new UserViewModel() { UserId = u.Id, Email = u.Id, Role = userLayer.GetRoleName(u.Id), IsBlocked = u.IsBlocked }).ToList();
             return View(userViewModels);
         }
 
@@ -130,6 +129,12 @@ namespace PrintStore.Controllers
             return View(product);
         }
 
+        /// <summary>
+        /// Edits product
+        /// </summary>
+        /// <param name="product">Product to save</param>
+        /// <param name="image">Image posted from a form</param>
+        /// <returns>Redirection to all categories and their products</returns>
         [HttpPost]
         public ActionResult EditProduct(Product product, HttpPostedFileBase image)
         {
@@ -140,7 +145,9 @@ namespace PrintStore.Controllers
 
             if (image != null)
             {
+                //Stores image to a temporary location
                 image.SaveAs(Server.MapPath(EFBusinessLogicLayer.TempImagePath));
+                //Generates a new guid for naming bigger and smaller pictures of the product
                 product.ImageGuid = Guid.NewGuid();
             }
 

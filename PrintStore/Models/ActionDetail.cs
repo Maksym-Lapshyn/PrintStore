@@ -5,6 +5,9 @@ using System.Web;
 
 namespace PrintStore.Models
 {
+    /// <summary>
+    /// Information for logging actions
+    /// </summary>
     public class ActionDetail
     {
         public int Id { get; set; }

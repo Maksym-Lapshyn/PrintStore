@@ -9,12 +9,23 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace PrintStore.Infrastructure.Concrete
 {
+    /// <summary>
+    /// User managing functionality embodied with the help of Identity and Entity Framework
+    /// </summary>
     public class IdentityUserLayer : IUserLayer
     {
         ApplicationDbContext context = new ApplicationDbContext();
 
         public IEnumerable<ApplicationUser> Users { get { return context.Users; } }
 
+        /// <summary>
+        /// Changes role of a user
+        /// </summary>
+        /// <remarks>
+        /// Only one role is allowed at a time
+        /// </remarks>
+        /// <param name="userId">Id of user</param>
+        /// <param name="userRole">Selected role</param>
         public void ChangeUserRole(string userId, string userRole)
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
@@ -38,6 +49,14 @@ namespace PrintStore.Infrastructure.Concrete
             context.SaveChanges();
         }
 
+        /// <summary>
+        /// Gets string value for user's role
+        /// </summary>
+        /// <remarks>
+        /// Only one role is allowed at a time
+        /// </remarks>
+        /// <param name="userId">Id of user to get role for</param>
+        /// <returns></returns>
         public string GetRoleName(string userId)
         {
             ApplicationUser user = context.Users.Where(u => u.Id == userId).First();

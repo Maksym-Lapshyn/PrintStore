@@ -9,11 +9,9 @@ namespace PrintStore.Domain.Entities
 {
     /// <summary>
     /// Basic selling unit of PrintStore
+    /// BigImagePath and SmallImagePath - paths to high- and low-resolution pictures of product respectively
+    /// ImageGuid - unique id for naming product's pictures</param>
     /// </summary>
-    /// <param name='DateAdded'>Generates when product is added to db</param>
-    /// <param name='BigImagePath'>Path to high-resolution picture of product</param>
-    /// <param name='SmallImagePath'>Path to low-resolution picture of product</param>
-    /// <param name='ImageGuid'>Unique id for naming entity's images</param>
     public class Product
     {
         public int ProductId { get; set; }

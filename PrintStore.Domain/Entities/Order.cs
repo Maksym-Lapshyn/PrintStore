@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace PrintStore.Domain.Entities
 {
+    /// <summary>
+    /// Order summary
+    /// </summary>
     public class Order
     {
         public int OrderId { get; set; }

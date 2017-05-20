@@ -1,12 +1,9 @@
-﻿@using PrintStore.Domain.Entities
-@using PrintStore.Domain.Concrete
-@using Microsoft.AspNet.Identity
-@model List<Order>
+﻿@using PrintStore.Models
+@model List<OrderViewModel>
 
 @{
     ViewBag.Title = "User profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
 }
 
 <div class="panel panel-default">
@@ -24,7 +21,7 @@
                     <th>Total price</th>
                     <th>Products</th>
                 </tr>
-                @foreach (Order order in Model.Where(o => !o.IsDeleted))
+                @foreach (OrderViewModel order in Model)
                 {
                     <tr>
                         <td>@order.OrderId</td>
@@ -32,10 +29,9 @@
                         <td>@order.OrderStatus</td>
                         <td>$@order.TotalPrice</td>
                         <td>
-                            @foreach (CartLine cartLine in order.CartLines)
+                            @foreach (CartLineViewModel line in order.CartLineViewModels)
                             {
-                                Product product = layer.Products.Where(p => p.ProductId == cartLine.ProductId).First();
-                                <p>@string.Format("{0}({1}) x {2}", product.Name, product.Price, cartLine.Quantity)</p>
+                                <p>@string.Format("{0}({1}) x {2}", line.Product.Name, line.Product.Price, line.Quantity)</p>
                             }
                         </td>
                     </tr>

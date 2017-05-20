@@ -7,6 +7,9 @@ using PrintStore.Models;
 
 namespace PrintStore.Infrastructure.Abstract
 {
+    /// <summary>
+    /// Basic interface for logging actions and exceptions
+    /// </summary>
     public interface ILoggingLayer
     {
         void LogException(ExceptionDetail detail);

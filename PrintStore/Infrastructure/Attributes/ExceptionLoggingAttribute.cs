@@ -9,8 +9,15 @@ using PrintStore.Models;
 
 namespace PrintStore.Infrastructure.Attributes
 {
+    /// <summary>
+    /// Attribute for logging exception information
+    /// </summary>
     public class ExceptionLoggingAttribute : HandleErrorAttribute
     {
+        /// <summary>
+        /// Logs exceptions using EFLoggingLayer
+        /// </summary>
+        /// <param name="filterContext">Context of filter</param>
         public override void OnException(ExceptionContext filterContext)
         {
             EFLoggingLayer layer = new EFLoggingLayer();

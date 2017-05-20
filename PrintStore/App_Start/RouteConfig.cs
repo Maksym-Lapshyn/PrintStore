@@ -13,6 +13,7 @@ namespace PrintStore
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //Sets all routes to lowercase
             routes.LowercaseUrls = true;
 
             routes.MapRoute(

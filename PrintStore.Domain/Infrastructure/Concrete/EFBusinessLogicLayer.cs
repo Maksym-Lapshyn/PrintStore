@@ -13,10 +13,11 @@ using System.Web;
 namespace PrintStore.Domain.Infrastructure.Concrete
 {
     /// <summary>
-    /// Business logic layer based on Entity Framework
+    /// Functionality embodied with the help of Entity Framework
     /// </summary>
     public class EFBusinessLogicLayer : IBusinessLogicLayer
     {
+        //Database context
         private EFDbContext context = new EFDbContext();
 
         public IEnumerable<Product> Products
@@ -76,6 +77,11 @@ namespace PrintStore.Domain.Infrastructure.Concrete
             context.SaveChanges();
         }
 
+        /// <summary>
+        /// Deletes category by changing its property IsDeleted to true
+        /// </summary>
+        /// <param name="categoryId">Id of category to delete</param>
+        /// <returns></returns>
         public Category DeleteCategory(int categoryId)
         {
             Category category = context.Categories.Find(categoryId);
@@ -92,7 +98,7 @@ namespace PrintStore.Domain.Infrastructure.Concrete
         /// <summary>
         /// If id of uploaded product is 0, it is saved as new entity
         /// Imageguid is generated when image of product is uploaded
-        /// If imageguid is not null, it is used to save images of product
+        /// If imageguid is not default, it is used to save images of product
         /// </summary>
         /// <param name="product">Product to save</param>
         public void SaveProduct(Product product)
@@ -149,11 +155,13 @@ namespace PrintStore.Domain.Infrastructure.Concrete
         {
             String tempImageLocation = HttpContext.Current.Server.MapPath(TempImagePath);
             Bitmap tempImage = new Bitmap(tempImageLocation);
+            //Change resolution for bigger picture in the next line
             System.Drawing.Size imageSize = new System.Drawing.Size(1200, 800);
             Bitmap bigImage = new Bitmap(tempImage, imageSize);
             bigImage.Save(HttpContext.Current.Server.MapPath(string.Format("~/Images/big_{0}.jpg", product.ImageGuid)), ImageFormat.Jpeg);
             bigImage.Dispose();
             product.BigImagePath = string.Format("big_{0}.jpg", product.ImageGuid);
+            //Change resolution for smaller picture in the next line
             imageSize = new System.Drawing.Size(300, 200);
             Bitmap smallImage = new Bitmap(tempImage, imageSize);
             smallImage.Save(HttpContext.Current.Server.MapPath(string.Format("~/Images/small_{0}.jpg", product.ImageGuid)), ImageFormat.Jpeg);
@@ -164,6 +172,11 @@ namespace PrintStore.Domain.Infrastructure.Concrete
             return product;
         }
 
+        /// <summary>
+        /// Deletes category by changing its property IsDeleted to true
+        /// </summary>
+        /// <param name="productId">Id of product to delete</param>
+        /// <returns></returns>
         public Product DeleteProduct(int productId)
         {
             Product product = context.Products.Find(productId);
@@ -177,21 +190,31 @@ namespace PrintStore.Domain.Infrastructure.Concrete
             return product;
         }
 
+        /// <summary>
+        /// Gets price limits from a product's table
+        /// </summary>
+        /// <param name="minimum">True for minimum limit, false for maximum</param>
+        /// <returns></returns>
         public decimal GetPriceLimit(bool minimum)
         {
             decimal priceLimit = 0;
             if (minimum)
             {
-                priceLimit = context.Products.Min(p => p.Price);
+                priceLimit = context.Products.Where(p => p.IsDeleted == false).Min(p => p.Price);
             }
             else
             {
-                priceLimit = context.Products.Max(p => p.Price);
+                priceLimit = context.Products.Where(p => p.IsDeleted == false).Max(p => p.Price);
             }
 
             return priceLimit;
         }
 
+        /// <summary>
+        /// Saves orders to database
+        /// </summary>
+        /// <param name="cartLines">Collection of cartlines from a user's cart</param>
+        /// <param name="userId">Id of a user who checked out</param>
         public void SaveOrder(List<CartLine> cartLines, string userId)
         {
             Order order = new Order();
@@ -203,6 +226,11 @@ namespace PrintStore.Domain.Infrastructure.Concrete
             context.SaveChanges();
         }
 
+        /// <summary>
+        /// Deletes order by changing its property IsDeleted to true
+        /// </summary>
+        /// <param name="orderId">Id of order to delete</param>
+        /// <returns></returns>
         public Order DeleteOrder(int orderId)
         {
             Order order = context.Orders.Find(orderId);
@@ -211,6 +239,11 @@ namespace PrintStore.Domain.Infrastructure.Concrete
             return order;
         }
 
+        /// <summary>
+        /// Restores order from by changing its property IsDeleted to true
+        /// </summary>
+        /// <param name="orderId">Id of order to delete</param>
+        /// <returns></returns>
         public Order RestoreOrder(int orderId)
         {
             Order order = context.Orders.Find(orderId);
@@ -219,6 +252,11 @@ namespace PrintStore.Domain.Infrastructure.Concrete
             return order;
         }
 
+        /// <summary>
+        /// Changes status of order
+        /// </summary>
+        /// <param name="orderId">Id of order to change</param>
+        /// <param name="orderStatus">Selected status</param>
         public void ChangeOrderStatus(int orderId, string orderStatus)
         {
             Order order = context.Orders.Find(orderId);

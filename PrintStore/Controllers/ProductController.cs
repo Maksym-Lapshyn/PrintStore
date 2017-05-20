@@ -10,12 +10,16 @@ using PrintStore.Infrastructure.Attributes;
 
 namespace PrintStore.Controllers
 {
+    /// <summary>
+    /// Controller for product's functionality
+    /// </summary>
     [ActionLogging]
-
+    [ExceptionLogging]
     public class ProductController : Controller
     {
         IBusinessLogicLayer businessLayer;
 
+        //Contstuctor that takes argument from Ninject
         public ProductController(IBusinessLogicLayer businessLayerParam)
         {
             businessLayer = businessLayerParam;
@@ -32,11 +36,16 @@ namespace PrintStore.Controllers
             IEnumerable<Product> products = businessLayer.Products.Where(p => p.CategoryId == categoryId && p.IsDeleted == false);
             ProductsViewModel model = new ProductsViewModel();
             model.Products = products;
-            model.Filter = new FilterViewModel();
+            model.Filter = new FilterViewModel(businessLayer);
             model.Filter.CategoryId = categoryId;
             return View(model);
         }
 
+        /// <summary>
+        /// Gets products from a database, applies selected filters and displays them
+        /// </summary>
+        /// <param name="model">View model of filter + IEnumerable of Product</param>
+        /// <returns>Filtered view model of products</returns>
         [HttpPost]
         public ActionResult GetProducts(ProductsViewModel model)
         {
@@ -56,6 +65,12 @@ namespace PrintStore.Controllers
             return View(product);
         }
 
+        /// <summary>
+        /// Applies filter to IEnumerable of Product
+        /// </summary>
+        /// <param name="products">IEnumerable of Product</param>
+        /// <param name="filter">View model of filter</param>
+        /// <returns>Filtered IEnumerable of Product</returns>
         private IEnumerable<Product> ApplyFilters(IEnumerable<Product> products, FilterViewModel filter)
         {
             products = products.Where(p => p.Price >= filter.SelectedMinimum && p.Price <= filter.SelectedMaximum);
@@ -75,6 +90,7 @@ namespace PrintStore.Controllers
                 products = products.Where(p => p.Texture.ToString() == filter.Texture.ToString());
             }
 
+            //Performs sorting
             if (filter.SortOrder.ToString() != "None")
             {
                 products = SortProducts(products, filter.SortOrder);
@@ -83,6 +99,12 @@ namespace PrintStore.Controllers
             return products;
         }
 
+        /// <summary>
+        /// Sorts IEnumerable of Product
+        /// </summary>
+        /// <param name="products">IEnumerable of Product</param>
+        /// <param name="sortOrder">Order for sorting</param>
+        /// <returns>Sorted IEnumerable of Product</returns>
         private IEnumerable<Product> SortProducts(IEnumerable<Product> products, PrintStore.Models.SortOrder sortOrder)
         {
             if (sortOrder == PrintStore.Models.SortOrder.NameAsc)

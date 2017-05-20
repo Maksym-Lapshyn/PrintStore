@@ -8,11 +8,18 @@ using PrintStore.Models;
 
 namespace PrintStore.Infrastructure.Attributes
 {
+    /// <summary>
+    /// Attribute for logging action information
+    /// </summary>
     public class ActionLoggingAttribute : ActionFilterAttribute
     {
         public const string Anonymous = "anonymous";
         public const string Local = "local";
 
+        /// <summary>
+        /// Logs actions using EFLoggingLayer
+        /// </summary>
+        /// <param name="filterContext">Context of filter</param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             EFLoggingLayer layer = new EFLoggingLayer();

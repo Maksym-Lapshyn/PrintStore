@@ -8,9 +8,8 @@ using System.ComponentModel.DataAnnotations;
 namespace PrintStore.Domain.Entities
 {
     /// <summary>
-    /// Category for products
+    /// Category that contains products
     /// </summary>
-    /// <param name='Products'>Collection of product entities</param>
     public class Category
     {
         public int CategoryId { get; set; }

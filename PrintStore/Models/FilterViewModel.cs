@@ -6,13 +6,17 @@ using PrintStore.Domain.Infrastructure.Concrete;
 using PrintStore.Domain.Entities;
 using PrintStore.Infrastructure.Attributes;
 using System.ComponentModel.DataAnnotations;
+using PrintStore.Domain.Infrastructure.Abstract;
 
 namespace PrintStore.Models
 {
+    /// <summary>
+    /// View model of filter
+    /// </summary>
     [Filter(ErrorMessage = "Select correct minimum and maximum prices")]
     public class FilterViewModel
     {
-        EFBusinessLogicLayer layer = new EFBusinessLogicLayer();
+        IBusinessLogicLayer businessLayer;
 
         public int CategoryId { get; set; }
 
@@ -32,10 +36,11 @@ namespace PrintStore.Models
 
         public SortOrder SortOrder { get; set; }
 
-        public FilterViewModel()
+        public FilterViewModel(IBusinessLogicLayer businessLayerParam)
         {
-            MinimumLimit = layer.GetPriceLimit(true);
-            MaximumLimit = layer.GetPriceLimit(false);
+            businessLayer = businessLayerParam;
+            MinimumLimit = businessLayer.GetPriceLimit(true);
+            MaximumLimit = businessLayer.GetPriceLimit(false);
         }
     }
 

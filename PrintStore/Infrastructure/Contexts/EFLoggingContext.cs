@@ -6,6 +6,9 @@ using PrintStore.Models;
 
 namespace PrintStore.Infrastructure.Contexts
 {
+    /// <summary>
+    /// Logging context for Entity Framework
+    /// </summary>
     public class EFLoggingContext : DbContext
     {
         public DbSet<ExceptionDetail> ExceptionDetails { get; set; }

@@ -5,6 +5,9 @@ using System.Web;
 
 namespace PrintStore.Models
 {
+    /// <summary>
+    /// View model for user's information
+    /// </summary>
     public class UserViewModel
     {
         public string UserId { get; set; }
