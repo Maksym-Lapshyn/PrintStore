@@ -14,7 +14,7 @@ namespace PrintStore.Controllers
     /// Controller for product's functionality
     /// </summary>
     [ActionLogging]
-    [ExceptionLogging]
+
     public class ProductController : Controller
     {
         IBusinessLogicLayer businessLayer;

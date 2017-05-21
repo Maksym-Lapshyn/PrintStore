@@ -42,6 +42,13 @@ namespace PrintStore.Models
             MinimumLimit = businessLayer.GetPriceLimit(true);
             MaximumLimit = businessLayer.GetPriceLimit(false);
         }
+
+        public FilterViewModel()
+        {
+            businessLayer = new EFBusinessLogicLayer();
+            MinimumLimit = businessLayer.GetPriceLimit(true);
+            MaximumLimit = businessLayer.GetPriceLimit(false);
+        }
     }
 
     public enum Material
