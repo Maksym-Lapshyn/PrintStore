@@ -15,7 +15,8 @@
             <tr>
                 <th style="width:5%;">Id</th>
                 <th style="width:15%;">Name</th>
-                <th style="width:25%;">Description</th>
+                <th style="width:10%;">Is Deleted</th>
+                <th style="width:15%;">Description</th>
                 <th style="width:15%;">Actions</th>
                 <th style="width:40%;">Products</th>
             </tr>
@@ -24,6 +25,7 @@
                 <tr>
                     <td>@category.CategoryId</td>
                     <td>@category.Name</td>
+                    <td>@category.IsDeleted</td>
                     <td>@category.Description</td>
                     <td>
                         @Html.ActionLink("Edit", "EditCategory", "Admin", new { categoryId = category.CategoryId }, new { @class = "btn btn-default" })
@@ -36,10 +38,6 @@
                     <td>
                         @foreach (Product product in category.Products)
                         {
-                            if (product.IsDeleted == true)
-                            {
-                                continue;
-                            }
                             <p>
                                 @product.Name
                                 @Html.ActionLink("Edit", "EditProduct", "Admin", new { productId = product.ProductId }, new { @class = "btn btn-default" })

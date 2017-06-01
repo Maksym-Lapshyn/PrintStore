@@ -20,10 +20,12 @@ namespace PrintStore.Models
 
         public int CategoryId { get; set; }
 
+        [Required(ErrorMessage = "Minimum price is required!")]
         public decimal SelectedMinimum { get; set; }
 
         public decimal MinimumLimit { get; set; }
 
+        [Required(ErrorMessage = "Maximum price is required!")]
         public decimal SelectedMaximum { get; set; }
 
         public decimal MaximumLimit { get; set; }

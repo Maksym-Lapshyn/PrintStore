@@ -37,7 +37,7 @@ namespace PrintStore.Controllers
         public ViewResult GetUsers()
         {
             List<UserViewModel> userViewModels = new List<UserViewModel>();
-            userViewModels = userLayer.Users.Select(u => new UserViewModel() { UserId = u.Id, Email = u.Id, Role = userLayer.GetRoleName(u.Id), IsBlocked = u.IsBlocked }).ToList();
+            userViewModels = userLayer.Users.Select(u => new UserViewModel() { UserId = u.Id, Email = u.Email, Role = userLayer.GetRoleName(u.Id), IsBlocked = u.IsBlocked }).ToList();
             return View(userViewModels);
         }
 
@@ -83,7 +83,7 @@ namespace PrintStore.Controllers
 
         public ViewResult GetCategories()
         {
-            IEnumerable<Category> categories = businessLayer.Categories.Where(c => c.IsDeleted == false);
+            IEnumerable<Category> categories = businessLayer.Categories;
             return View(categories);
         }
 

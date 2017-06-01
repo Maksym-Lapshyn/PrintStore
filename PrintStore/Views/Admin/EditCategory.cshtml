@@ -15,6 +15,12 @@
             @Html.ValidationSummary()
             @Html.HiddenFor(c => c.CategoryId)
 
+            <p>@Html.LabelFor(c => c.IsDeleted)</p>
+            <p>@Html.DropDownListFor(c => c.IsDeleted, new[] {
+                                new SelectListItem { Value = "true", Text = "True", Selected = Model.IsDeleted },
+                                new SelectListItem { Value = "false", Text = "False", Selected = !Model.IsDeleted }
+                            }, new { @class = "form-control" })</p>
+
             <p>@Html.LabelFor(c => c.Name)</p>
             <p>@Html.TextBoxFor(c => c.Name, new { @class = "form-control" })</p>
 

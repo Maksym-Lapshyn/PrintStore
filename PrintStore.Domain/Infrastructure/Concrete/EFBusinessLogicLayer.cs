@@ -24,7 +24,7 @@ namespace PrintStore.Domain.Infrastructure.Concrete
         {
             get
             {
-                return context.Products.Where(p => !p.IsDeleted);
+                return context.Products;
             }
         }
 
@@ -32,7 +32,7 @@ namespace PrintStore.Domain.Infrastructure.Concrete
         {
             get
             {
-                return context.Categories.Where(c => !c.IsDeleted);
+                return context.Categories;
             }
         }
 
@@ -66,11 +66,9 @@ namespace PrintStore.Domain.Infrastructure.Concrete
                 Category forSave = context.Categories.Find(category.CategoryId);
                 if (forSave != null)
                 {
-                    forSave.CategoryId = category.CategoryId;
+                    forSave.IsDeleted = category.IsDeleted;
                     forSave.Name = category.Name;
                     forSave.Description = category.Description;
-                    IEnumerable<Product> productsOfCategory = Products.Where(p => p.Category == category).ToList();
-                    forSave.Products = (ICollection<Product>)productsOfCategory;
                 }
             }
 

@@ -53,9 +53,11 @@
 
                         <p>@Html.LabelFor(m => m.Filter.SelectedMinimum, string.Format("Minimum price (${0})", Model.Filter.MinimumLimit))</p>
                         @Html.SelectedPriceHelper("Filter.SelectedMinimum", Model.Filter.SelectedMinimum, Model.Filter.MinimumLimit)
+                        @Html.ValidationMessageFor(m => m.Filter.SelectedMinimum)
 
                         <p>@Html.LabelFor(m => m.Filter.SelectedMaximum, string.Format("Maximum price (${0})", Model.Filter.MaximumLimit))</p>
                         @Html.SelectedPriceHelper("Filter.SelectedMaximum", Model.Filter.SelectedMaximum, Model.Filter.MaximumLimit)
+                        @Html.ValidationMessageFor(m => m.Filter.SelectedMaximum)
 
                         <p>@Html.LabelFor(m => m.Filter.Material)</p>
                         <p>@Html.DropDownListFor(m => m.Filter.Material, new SelectList(Enum.GetNames(Model.Filter.Material.GetType()), Model.Filter.Material.ToString()), new { @class = "form-control" })</p>
@@ -93,7 +95,7 @@
                                     <p><span class="label label-default label-price">$@product.Price</span><input type="number" name="quantity" min="1" max="1000" value="1" class="form-control pull-right" style="width:100px; height:51px;"/></p>
                                     <input type="hidden" name="productId" value=@product.ProductId />
                                     @Html.ActionLink("Details", "GetProductDetails", "Product", new { productId = product.ProductId }, new { @class = "btn btn-default btn-lg" })
-                                    <input type="submit" value="Add to cart" class="btn btn-primary btn-lg pull-right" />
+                                    <input type="submit" value="To cart" class="btn btn-primary btn-lg pull-right" />
                                 }
 
                             </div>
@@ -113,8 +115,9 @@
             <p>@DateTime.Now.Year - PrintStore&copy; - All rights reserved</p>
         </footer>
     </div>
-
-    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery-3.1.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
 </body>
 </html>
